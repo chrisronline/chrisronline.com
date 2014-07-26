@@ -51,11 +51,21 @@
           <Category category={category} key={category.name}/>
         );
       });
-      return (
-        <div className="section-content">
-          {categoryNodes}
-        </div>
-      );
+
+      if (categoryNodes.length) {
+        return (
+          <div className="section-content">
+            {categoryNodes}
+          </div>
+        );
+      }
+      else {
+        return (
+          <div className="section-content">
+            <i className="fa fa-spinner fa-spin"></i>
+          </div>
+        );
+      }
     }
   });
 
