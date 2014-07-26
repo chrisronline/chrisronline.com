@@ -79,8 +79,6 @@ gulp.task('connect', function() {
 // Production
 gulp.task('build', function(cb) {
   del.sync(dev.dist, {force:true});
-  gulp.src(dev.base + '/../.htaccess')
-    .pipe(gulp.dest(dev.dist));
   gulp.src(dev.base + '/*.html')
     .pipe(gulp.dest(dev.dist));
   gulp.src(dev.scriptsDest + '/*.js')
