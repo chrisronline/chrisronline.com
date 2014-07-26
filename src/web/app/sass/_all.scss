@@ -45,19 +45,19 @@ ul {
   margin: 0;
 }
 
-.svisible {
-  @include opacity(0);
-  @include translate(-200px, 0, 0);
-}
-
 .visible {
+  z-index: 0;
   @include transition(opacity 1s, transform 0.2s);
   @include opacity(1);
   @include translate(0, 0, 0);
 }
 
 section {
-  display: none;
+  position: absolute;
+  z-index: -1;
+  @include opacity(0);
+  @include translate(-200px, 0, 0);
+
   font-size: 1.4rem;
 }
 

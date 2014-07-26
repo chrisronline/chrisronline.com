@@ -11,9 +11,9 @@
       var element = $(hash);
       if (element.length) {
         sections.each(function() {
-          $(this).hide().removeClass('visible');
+          $(this).removeClass('visible');
         })
-        element.show().addClass('svisible');
+        element.addClass('svisible');
         $('nav a').removeClass('active');
         $('nav a[href="' + hash + '"]').addClass('active');
         setTimeout(function() {
