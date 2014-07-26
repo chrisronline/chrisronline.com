@@ -43,6 +43,7 @@ gulp.task('compass', function() {
   gulp.src(dev.sassSrc + '/*.scss')
     .pipe(plumber())
     .pipe(compass({
+      import_path: dev.bowerSrc,
       css: dev.cssDest,
       sass: dev.sassSrc,
       image: dev.imagesSrc
