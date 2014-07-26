@@ -10,6 +10,7 @@ var react = require('gulp-react');
 var plumber = require('gulp-plumber');
 var minifycss = require('gulp-minify-css');
 var replace = require('gulp-replace');
+var debug = require('gulp-debug');
 
 // Development
 var dev = {
@@ -77,9 +78,10 @@ gulp.task('connect', function() {
 });
 
 // Production
-gulp.task('build', function(cb) {
+gulp.task('build', ['generate-scripts', 'vendor', 'minify-images', 'compass'], function(cb) {
   del.sync(dev.dist, {force:true});
   gulp.src(dev.base + '/*.html')
+    // .pipe(debug({verbose:true}))
     .pipe(gulp.dest(dev.dist));
   gulp.src(dev.scriptsDest + '/*.js')
     .pipe(replace(/localhost/, 'chrisronline.com'))

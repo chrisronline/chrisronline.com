@@ -15,7 +15,8 @@
   "devDependencies": {
     "mocha": "latest",
     "should": "latest",
-    "step": "0.0.5"
+    "step": "0.0.5",
+    "gulp-debug": "~1.0.0"
   },
   "scripts": {
     "help": "actionhero help",

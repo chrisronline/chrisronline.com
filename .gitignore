@@ -5,6 +5,7 @@ log
 pids
 .sass-cache
 .DS_Store
-web/app/css
-web/app/js
+src/web/app/css
+src/web/app/js
 tokens.js
+src/public
