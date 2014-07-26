@@ -1,0 +1,44 @@
+.container > header {
+  position: absolute;
+  top: 8rem;
+  left: 5rem;
+  text-align: right;
+
+  h1 {
+    margin: 0;
+  }
+
+  nav {
+    font-size: 1.2rem;
+  }
+
+  @include clear();
+
+  li {
+    display: block;
+    margin: 0.5rem 0;
+  }
+  a {
+    font-size: larger;
+    display: inline-block;
+    border-bottom: solid 2px transparent;
+    padding: 0.3rem;
+    @include transition(color 0.5s);
+  }
+
+  a:hover {
+    color: $darkerGreen;
+    text-decoration: none;
+  }
+  a.active {
+    color: $darkerGreen;
+    border-bottom-color: $green;
+  }
+
+  ul:last-child {
+    margin-top: 2rem;
+    li {
+      display: inline-block;
+    }
+  }
+}
