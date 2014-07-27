@@ -84,6 +84,8 @@ gulp.task('build', ['generate-scripts', 'vendor', 'minify-images', 'compass'], f
   gulp.src(dev.base + '/*.html')
     // .pipe(debug({verbose:true}))
     .pipe(gulp.dest(dev.dist));
+  gulp.src(dev.base + '/../favicon.ico')
+    .pipe(gulp.dest(dev.dist));
   gulp.src(dev.scriptsDest + '/*.js')
     .pipe(replace(/localhost/, 'chrisronline.com'))
     .pipe(uglify())
