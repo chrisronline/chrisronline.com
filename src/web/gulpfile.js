@@ -11,6 +11,9 @@ var plumber = require('gulp-plumber');
 var minifycss = require('gulp-minify-css');
 var replace = require('gulp-replace');
 var debug = require('gulp-debug');
+var rev = require('gulp-rev');
+var revreplace = require('gulp-rev-replace');
+var revcollector = require('gulp-rev-collector');
 
 // Development
 var dev = {
@@ -24,7 +27,8 @@ var dev = {
   cssDest: 'app/css',
   jsxSrc: 'app/scripts',
   jsxDest: 'app/js',
-  dist: '../public'
+  dist: '../public',
+  revDir: 'rev/'
 }
 gulp.task('generate-scripts', function() {
   return gulp.src(dev.scriptsSrc + '/**/*.js')
@@ -81,20 +85,31 @@ gulp.task('connect', function() {
 // Production
 gulp.task('build', ['generate-scripts', 'vendor', 'minify-images', 'compass'], function(cb) {
   del.sync(dev.dist, {force:true});
-  gulp.src(dev.base + '/*.html')
-    // .pipe(debug({verbose:true}))
-    .pipe(gulp.dest(dev.dist));
+
   gulp.src(dev.base + '/../favicon.ico')
     .pipe(gulp.dest(dev.dist));
+
   gulp.src(dev.scriptsDest + '/*.js')
     .pipe(replace(/localhost/, 'chrisronline.com'))
     .pipe(uglify())
-    .pipe(gulp.dest(dev.dist + '/js'));
+    .pipe(rev())
+    .pipe(gulp.dest(dev.dist + '/js'))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest(dev.revDir + '/js'));
+
   gulp.src(dev.cssDest + '/*.css')
     .pipe(minifycss({keepBreaks:true}))
-    .pipe(gulp.dest(dev.dist + '/css'));
+    .pipe(rev())
+    .pipe(gulp.dest(dev.dist + '/css'))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest(dev.revDir + '/css'));
+
   gulp.src(dev.base + '/fonts/*')
     .pipe(gulp.dest(dev.dist + '/fonts'));
+
+  gulp.src([dev.revDir + '/**/*.json', dev.base + '/*.html'])
+    .pipe(revcollector())
+    .pipe(gulp.dest(dev.dist));
 });
 
 
