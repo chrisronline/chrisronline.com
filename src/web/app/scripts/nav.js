@@ -11,14 +11,14 @@
       var element = $(hash);
       if (element.length) {
         sections.each(function() {
-          $(this).removeClass('visible');
+          $(this).hide().removeClass('visible');
         })
-        element.addClass('svisible');
-        $('nav a').removeClass('active');
-        $('nav a[href="' + hash + '"]').addClass('active');
+        element.show().addClass('svisible');
         setTimeout(function() {
           element.removeClass('svisible').addClass('visible');
         });
+        $('nav a').removeClass('active');
+        $('nav a[href="' + hash + '"]').addClass('active');
         window.location.hash = hash.substring(1);
       }
     }

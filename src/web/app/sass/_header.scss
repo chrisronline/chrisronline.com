@@ -1,7 +1,4 @@
 .container > header {
-  position: absolute;
-  top: 8rem;
-  left: 5rem;
   text-align: right;
 
   h1 {
@@ -39,6 +36,22 @@
     margin-top: 2rem;
     li {
       display: inline-block;
+    }
+  }
+
+  @include breakpoint(small) {
+    margin: 0;
+    text-align: left;
+    padding: 1rem;
+    li {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    ul {
+      text-align: center;
+    }
+    ul:last-child {
+      margin-top: 0;
     }
   }
 }

@@ -7,3 +7,13 @@
     clear: both;
   }
 }
+
+@mixin breakpoint($point) {
+  $bp: 1096px;
+  @if $point == default {
+    @media (min-width: $bp) { @content; }
+  }
+  @else if $point == small {
+    @media (max-width: $bp) { @content; }
+  }
+}
