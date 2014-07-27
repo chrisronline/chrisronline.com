@@ -48,7 +48,7 @@
     render: function() {
       var categoryNodes = this.state.categories.map(function(category, index) {
         return (
-          <Category category={category} key={category.name}/>
+          <Category category={category} key={category.id}/>
         );
       });
 
@@ -95,8 +95,8 @@
     render: function() {
       var projectNodes = this.props.projects.map(function(project, index) {
         return (
-          <li>
-            <Project project={project} key={index}/>
+          <li key={project.id}>
+            <Project project={project}/>
           </li>
         );
       });
