@@ -20,11 +20,17 @@
         $('nav a').removeClass('active');
         $('nav a[href="' + hash + '"]').addClass('active');
 
-        // On mobile, doing this in sync causes a the page
-        // to jump so do it after a second
-        setTimeout(function() {
-          window.location.hash = hash.substring(1);
-        }, 1000);
+        if (history.pushState) {
+          history.pushState(null, null, hash);
+        }
+        else {
+          // On mobile, doing this in sync causes a the page
+          // to jump so do it after a second
+          setTimeout(function() {
+            window.location.hash = hash;
+          }, 1000);
+        }
+
       }
     }
 
