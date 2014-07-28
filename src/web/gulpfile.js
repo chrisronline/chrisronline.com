@@ -84,7 +84,7 @@ gulp.task('connect', function() {
 
 // Production
 gulp.task('build', ['generate-scripts', 'vendor', 'minify-images', 'compass'], function(cb) {
-  del.sync([dev.dist,dev.rev], {force:true});
+  del.sync([dev.dist,dev.revDir], {force:true});
 
   gulp.src(dev.base + '/../favicon.ico')
     .pipe(gulp.dest(dev.dist));
