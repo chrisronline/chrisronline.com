@@ -37,6 +37,9 @@
     li {
       display: inline-block;
     }
+    span {
+      display: none;
+    }
   }
 
   @include breakpoint(small) {
