@@ -19,7 +19,12 @@
         });
         $('nav a').removeClass('active');
         $('nav a[href="' + hash + '"]').addClass('active');
-        window.location.hash = hash.substring(1);
+
+        // On mobile, doing this in sync causes a the page
+        // to jump so do it after a second
+        setTimeout(function() {
+          window.location.hash = hash.substring(1);
+        }, 1000);
       }
     }
 
