@@ -90,7 +90,7 @@ gulp.task('build', ['generate-scripts', 'vendor', 'minify-images', 'compass'], f
     .pipe(gulp.dest(dev.dist));
 
   gulp.src(dev.scriptsDest + '/*.js')
-    .pipe(replace(/localhost:8082/, 'chrisronline.com'))
+    .pipe(replace(/localhost:8082/, 'www.chrisronline.com'))
     .pipe(uglify())
     .pipe(rev())
     .pipe(gulp.dest(dev.dist + '/js'))
