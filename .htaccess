@@ -1,9 +1,9 @@
 RewriteEngine on
 RewriteRule ^api/([a-zA-Z0-9]+)$ src/server/api.php?method=$1
-RewriteCond %{HTTP_HOST} ^(www.)?localhost:8081$
+RewriteCond %{HTTP_HOST} ^(www.)?chrisronline.com$
 RewriteCond %{REQUEST_URI} !^/src/web/dist/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /src/web/dist/$1
-RewriteCond %{HTTP_HOST} ^(www.)?localhost:8081$
+RewriteCond %{HTTP_HOST} ^(www.)?chrisronline.com$
 RewriteRule ^(/)?$ src/web/dist/index.html [L]
