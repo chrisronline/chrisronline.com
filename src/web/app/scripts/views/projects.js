@@ -29,9 +29,9 @@
     loadGitHubProjects: function() {
       var categories = this.props.categories;
       var self = this;
-      $.ajax('http://localhost:8081/api/github').done(
-        function(response) {
-          var repos = _.sortBy(response.repos, function(repo) {
+      $.ajax('http://localhost:8082/api/repos').done(
+        function(repos) {
+          var repos = _.sortBy(repos, function(repo) {
             return repo.stargazers_count || repo.commits.length;
           }).reverse();
           _.each(repos, function(repo) {

@@ -27,8 +27,8 @@ var dev = {
   cssDest: 'app/css',
   jsxSrc: 'app/scripts',
   jsxDest: 'app/js',
-  dist: '../public',
-  revDir: 'rev/'
+  dist: 'dist',
+  revDir: 'rev'
 }
 gulp.task('generate-scripts', function() {
   return gulp.src(dev.scriptsSrc + '/**/*.js')
@@ -90,7 +90,7 @@ gulp.task('build', ['generate-scripts', 'vendor', 'minify-images', 'compass'], f
     .pipe(gulp.dest(dev.dist));
 
   gulp.src(dev.scriptsDest + '/*.js')
-    .pipe(replace(/localhost/, 'chrisronline.com'))
+    .pipe(replace(/localhost:8082/, 'chrisronline.com'))
     .pipe(uglify())
     .pipe(rev())
     .pipe(gulp.dest(dev.dist + '/js'))
