@@ -34,6 +34,8 @@ html, body {
 h1,
 h2,
 h3,
+h4,
+h5,
 nav {
   color: #111;
   font-variant: small-caps;
@@ -54,7 +56,7 @@ h2 {
   }
 }
 h3 { font-size: 2rem; }
-h4 { font-size: 1.3rem; }
+h4 { font-size: 1.8rem; }
 
 h2 {
   margin-bottom: 2rem;
@@ -95,6 +97,7 @@ section {
     @include translate(-10rem, 0, 0);
   }
   font-size: 1.4rem;
+  display: none;
 }
 
 .fa-2x { font-size: 2rem; }

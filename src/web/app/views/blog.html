@@ -1,0 +1,33 @@
+---
+title: blog
+---
+<header>
+  <h2>Thoughts</h2>
+</header>
+
+<h3>Tags</h3>
+<ul class="tags">
+  {{#blog.tags}}
+  <li>{{tag}}</li>
+  {{/blog.tags}}
+</ul>
+
+<h3>Posts</h3>
+<ul class="posts">
+  {{#blog.posts}}
+  <li class="post">
+    <header>
+      <h5>
+        <i class="fa fa-calendar"></i>
+        <span>{{date}}</span>
+      </h5>
+      <h4>
+        <a href="#{{id}}">{{title}}</a>
+      </h4>
+    </header>
+    <article id="{{id}}" data-navigate="post/{{id}}">
+      {{{content}}}
+    </article>
+  </li>
+  {{/blog.posts}}
+</ul>

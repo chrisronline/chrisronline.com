@@ -14,9 +14,15 @@
     <h1>chrisronline.com</h1>
     <nav>
       <ul>
-        <li><a href="#about">about</a></li>
-        <li><a href="#projects">projects</a></li>
-        <li><a href="#blog">blog</a></li>
+        <li>
+          <a href="#about" data-navigate-link="about">about</a>
+        </li>
+        <li>
+          <a href="#blog" data-navigate-link="blog">blog</a>
+        </li>
+        <li>
+          <a href="#projects" data-navigate-link="projects">projects</a>
+        </li>
       </ul>
       <ul>
         <li>
@@ -41,24 +47,70 @@
     </nav>
   </header>
   <div id="content">
-    <section id="about">
+    <section id="about" data-navigate>
       <header>
-        <h2>Me</h2>
-      </header>
-      <div id="about-content"></div>
+  <h2>Me</h2>
+</header>
+<p>Hi. I'm Chris. I write code. I'm writing code using AngularJS right now. I love open source and am actively working on contributing more.</p>
+<p>I am currently building <a href="https://www.bookongigwell.com/">Gigwell</a>.</p>
+
     </section>
-    <section id="projects">
+    <section id="blog" data-navigate>
       <header>
-        <h2>Work</h2>
-      </header>
-      <p>Public repositories listed on github</p>
-      <div id="projects-content"></div>
+  <h2>Thoughts</h2>
+</header>
+
+<h3>Tags</h3>
+<ul class="tags">
+  <li>gulpjs</li>
+  <li> sass</li>
+  <li> web</li>
+</ul>
+
+<h3>Posts</h3>
+<ul class="posts">
+  <li class="post">
+    <header>
+      <h5>
+        <i class="fa fa-calendar"></i>
+        <span>08/04/2014</span>
+      </h5>
+      <h4>
+        <a href="#building-chrisronline-com">Building chrisronline.com</a>
+      </h4>
+    </header>
+    <article id="building-chrisronline-com" data-navigate="post/building-chrisronline-com">
+      
+<p>So yea I built this site</p>
+
+    </article>
+  </li>
+  <li class="post">
+    <header>
+      <h5>
+        <i class="fa fa-calendar"></i>
+        <span>08/02/2014</span>
+      </h5>
+      <h4>
+        <a href="#using-gulpjs">Using GulpJS</a>
+      </h4>
+    </header>
+    <article id="using-gulpjs" data-navigate="post/using-gulpjs">
+      
+Hey there bro!
+
+    </article>
+  </li>
+</ul>
+
     </section>
-    <section id="blog">
+    <section id="projects" data-navigate>
       <header>
-        <h2>Thoughts</h2>
-      </header>
-      <p>Coming soon...</p>
+  <h2>Work</h2>
+</header>
+<p>Public repositories listed on GitHub</p>
+<div id="projects-content"></div>
+
     </section>
   </div>
 </div>
