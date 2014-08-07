@@ -175,23 +175,25 @@ gulp.task('build-scripts', ['clean', 'generate-scripts', 'vendor'], function() {
     .pipe(gulp.dest(dev.revDir + '/js'));
 });
 gulp.task('build-css', ['clean', 'minify-images', 'compass'], function() {
-    return gulp.src(dev.cssDest + '/*.css')
-      .pipe(minifycss({keepBreaks:true}))
-      .pipe(rev())
-      .pipe(gulp.dest(dev.dist + '/css'))
-      .pipe(rev.manifest())
-      .pipe(gulp.dest(dev.revDir + '/css'));
+  return gulp.src(dev.cssDest + '/*.css')
+    .pipe(minifycss({keepBreaks:true}))
+    .pipe(rev())
+    .pipe(gulp.dest(dev.dist + '/css'))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest(dev.revDir + '/css'));
 });
 gulp.task('copy', ['clean'], function() {
-    gulp.src(dev.base + '/../favicon.ico')
-      .pipe(gulp.dest(dev.dist));
-    gulp.src(dev.base + '/fonts/*')
-      .pipe(gulp.dest(dev.dist + '/fonts'));
+  gulp.src(dev.base + '/../favicon.ico')
+    .pipe(gulp.dest(dev.dist));
+  gulp.src(dev.base + '/fonts/*')
+    .pipe(gulp.dest(dev.dist + '/fonts'));
+  gulp.src(dev.base + '/index.html')
+    .pipe(gulp.dest(dev.dist));
 });
 gulp.task('rev', ['clean', 'build-scripts', 'build-css'], function() {
-    return gulp.src([dev.revDir + '/**/*.json', dev.base + '/*.html'])
-      .pipe(revcollector())
-      .pipe(gulp.dest(dev.dist));
+  return gulp.src([dev.revDir + '/**/*.json', dev.base + '/*.html'])
+    .pipe(revcollector())
+    .pipe(gulp.dest(dev.dist));
 });
 
 gulp.task('build', [
