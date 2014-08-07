@@ -75,7 +75,7 @@ gulp.task('compile-templates', function() {
 
         model.blog = {};
         model.blog.tags = _.map(_.uniq(tags), function(tag) {
-          return { tag: tag };
+          return { tag: tag.trim() };
         });
         model.blog.posts = [];
 

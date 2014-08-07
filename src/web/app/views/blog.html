@@ -8,14 +8,16 @@ title: blog
 <h3>Tags</h3>
 <ul class="tags">
   {{#blog.tags}}
-  <li>{{tag}}</li>
+  <li>
+    <a data-tag="{{tag}}">{{tag}}</a>
+  </li>
   {{/blog.tags}}
 </ul>
 
 <h3>Posts</h3>
 <ul class="posts">
   {{#blog.posts}}
-  <li class="post">
+  <li class="post" data-tags="{{tags}}">
     <header>
       <h5>
         <i class="fa fa-calendar"></i>

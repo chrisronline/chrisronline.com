@@ -1,7 +1,29 @@
 (function() {
   'use strict';
 
-  var SinglePageNavigator = {
+  function show(route) {
+    var element = $('#' + route.id);
+    element.show().addClass('svisible');
+    setTimeout(function() {
+      element.removeClass('svisible').addClass('visible');
+    });
+    _.each(route.links, function(link) {
+      link.addClass('active');
+    });
+  }
+
+  function computeHash(route) {
+    route.__computedHash = '#' + route.hash;
+    if (route.regExp) {
+      var match = route.regExp.exec(window.location.hash);
+      if (match && match.length) {
+        route.__computedHash = '#' + route.hash + '/' + match[1];
+        route.__matchedHash = match[1];
+      }
+    }
+  }
+
+  var SinglePageNavigator = window.SinglePageNavigator = {
     __current: null,
     __routes: [],
     __config: {},
@@ -23,7 +45,7 @@
         if (parentPoints.length) {
           route.root = self.findRoute(parentPoints.first().attr('id'));
         }
-        self.__routes.push(route);
+        self.add(route);
       });
       $('[data-navigate-link]').each(function() {
         var link = $(this);
@@ -59,12 +81,17 @@
     },
     findRoute: function(value) {
       return _.find(this.__routes, function(route) {
-        return route.id === value || route.hash === value;
+        if (route.id === value || route.hash === value) {
+          return true;
+        }
+        if (route.regExp && route.regExp.test(value)) {
+          return true;
+        }
+        return false;
       });
     },
     reset: function(routes) {
       _.each(routes || this.__routes, function(route) {
-        // console.log('hiding', route, $('#' + route.id).length);
         $('#' + route.id).hide().removeClass('visible');
         _.each(route.links, function(link) {
           link.removeClass('active');
@@ -79,21 +106,27 @@
       else {
         this.reset();
         if (route.root) {
-          this._show(route.root);
+          show(route.root);
         }
       }
 
-      this._show(route);
+      show(route);
 
-      // console.log('showing', route, this.__current);
-      history.pushState(null, null, '#' + route.hash);
+      computeHash(route);
+
+      route.handler && route.handler(route);
+
+      history.pushState(null, null, route.__computedHash);
       this.__current = route;
     },
-    _show: function(route) {
-      var element = $('#' + route.id);
-      element.show().addClass('svisible');
-      setTimeout(function() { element.removeClass('svisible').addClass('visible'); });
-      _.each(route.links, function(link) { link.addClass('active'); });
+    add: function(route) {
+      var existing = _.find(this.__routes, { id: route.id });
+      if (!existing) {
+        this.__routes.push(route);
+      }
+      else {
+        existing = _.extend(existing, route);
+      }
     }
   };
 
