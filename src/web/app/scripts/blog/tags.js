@@ -55,7 +55,11 @@
         }
       }, this);
 
-      history.pushState(null, null, '#blog/' + this.__activeTags.join(','));
+      var active = SinglePageNavigator.get();
+      if (active.id === 'blog') {
+        history.pushState(null, null,
+          this.__activeTags.length ? '#blog/' + this.__activeTags.join(',') : '#blog');
+      }
 
       var self = this;
       self.reset();

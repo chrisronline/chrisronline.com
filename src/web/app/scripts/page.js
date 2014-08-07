@@ -127,6 +127,9 @@
       else {
         existing = _.extend(existing, route);
       }
+    },
+    get: function() {
+      return this.__current;
     }
   };
 
