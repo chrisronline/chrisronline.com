@@ -199,6 +199,7 @@ gulp.task('rev', ['clean', 'build-scripts', 'build-css'], function() {
 gulp.task('build', [
   'build-scripts',
   'build-css',
+  'compile-templates',
   'copy',
   'rev'
 ]);
