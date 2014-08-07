@@ -79,10 +79,12 @@
   };
 
   SinglePageNavigator.add({
-    regExp: /blog\/(.+)/,
+    regExp: /blog\/(.?)/,
     id: 'blog',
     handler: function(route) {
-      BlogTags.load(route.__matchedHash.split(','));
+      if (!_.isEmpty(route.__matchedHash)) {
+        BlogTags.load(route.__matchedHash.split(','));
+      }
     }
   });
 
