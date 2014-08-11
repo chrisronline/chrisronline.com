@@ -196,6 +196,8 @@ gulp.task('copy', ['clean'], function() {
     .pipe(gulp.dest(dev.dist));
   gulp.src(dev.base + '/fonts/*')
     .pipe(gulp.dest(dev.dist + '/fonts'));
+  gulp.src(dev.imagesSrc + '/**/*')
+    .pipe(gulp.dest(dev.dist + '/images'));
   gulp.src(dev.base + '/index.html')
     .pipe(gulp.dest(dev.dist));
 });

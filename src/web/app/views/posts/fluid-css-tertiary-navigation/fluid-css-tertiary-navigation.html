@@ -17,13 +17,13 @@ I recently fixed a navigation issue at work that involved a tiered, CSS-driven d
 I designed a fluid-width, CSS-based tertiary menu system that contains no hard-coded widths or assumptions about sizing.
 </p>
 <figure id="solution_1">
-  <a href="./img/tertiary_nav/solution_1.png">
-    <img src="./img/tertiary_nav/solution_1.png" alt="How the worse case scenario looked in the new CSS"/>
+  <a href="./images/blog/tertiary_nav/solution_1.png">
+    <img src="./images/blog/tertiary_nav/solution_1.png" alt="How the worse case scenario looked in the new CSS"/>
   </a>
 </figure>
 <figure id="solution_2">
-  <a href="./img/tertiary_nav/solution_2.png">
-    <img src="./img/tertiary_nav/solution_2.png" alt="Another part of the menu system in the new CSS, episode guide, season 2"/>
+  <a href="./images/blog/tertiary_nav/solution_2.png">
+    <img src="./images/blog/tertiary_nav/solution_2.png" alt="Another part of the menu system in the new CSS, episode guide, season 2"/>
   </a>
 </figure>
 
@@ -181,8 +181,8 @@ Add the same positioning to the tertiary list as the secondary list
 <p>
 Uh...that did not work as well as last time.
 <figure id="tertiary_absolute_problem">
-  <a href="./img/tertiary_nav/tertiary_absolute_problem.png">
-    <img src="./img/tertiary_nav/tertiary_absolute_problem.png" alt="The output of setting position:absolute for the tertiary list"/>
+  <a href="./images/blog/tertiary_nav/tertiary_absolute_problem.png">
+    <img src="./images/blog/tertiary_nav/tertiary_absolute_problem.png" alt="The output of setting position:absolute for the tertiary list"/>
   </a>
 </figure>
 </p>
@@ -204,8 +204,8 @@ The solution is to set the left position of the tertiary element to 100% which w
   </pre>
 </figure>
 <figure id="tertiary_absolute_solution">
-  <a href="./img/tertiary_nav/tertiary_absolute_solution.png">
-    <img src="./img/tertiary_nav/tertiary_absolute_solution.png" alt="The output of fixing the absolute issue with left:100%"/>
+  <a href="./images/blog/tertiary_nav/tertiary_absolute_solution.png">
+    <img src="./images/blog/tertiary_nav/tertiary_absolute_solution.png" alt="The output of fixing the absolute issue with left:100%"/>
   </a>
 </figure>
 
@@ -225,8 +225,8 @@ We're nearly there, but the tertiary navigation container is not correctly posit
   </pre>
 </figure>
 <figure id="final_top_position_problem">
-  <a href="./img/tertiary_nav/final_top_position_problem.png">
-    <img src="./img/tertiary_nav/final_top_position_problem.png" alt="The teritary container is mispositioned"/>
+  <a href="./images/blog/tertiary_nav/final_top_position_problem.png">
+    <img src="./images/blog/tertiary_nav/final_top_position_problem.png" alt="The teritary container is mispositioned"/>
   </a>
 </figure>
 
@@ -248,8 +248,8 @@ The top section of the tertiary container still appears relative to the original
 which then results in:
 </p>
 <figure id="tertiary_top_0">
-  <a href="./img/tertiary_nav/tertiary_top_0.png">
-    <img src="./img/tertiary_nav/tertiary_top_0.png" alt="The teritary container is now properly aligned at the top"/>
+  <a href="./images/blog/tertiary_nav/tertiary_top_0.png">
+    <img src="./images/blog/tertiary_nav/tertiary_top_0.png" alt="The teritary container is now properly aligned at the top"/>
   </a>
 </figure>
 </p>
@@ -276,13 +276,13 @@ The tertiary container is now correctly placed! Let's hook up the CSS hover func
 Everything looks great at first glance, but there are two issues with the tertiary navigation containers...
 </p>
 <figure id="final_whitespace_problem">
-  <a href="./img/tertiary_nav/final_whitespace_problem.png">
-    <img src="./img/tertiary_nav/final_whitespace_problem.png" alt="Whitespace issue with a tertiary link"/>
+  <a href="./images/blog/tertiary_nav/final_whitespace_problem.png">
+    <img src="./images/blog/tertiary_nav/final_whitespace_problem.png" alt="Whitespace issue with a tertiary link"/>
   </a>
 </figure>
 <figure id="final_relative_problem">
-  <a href="./img/tertiary_nav/final_relative_problem.png">
-    <img src="./img/tertiary_nav/final_relative_problem.png" alt="Second tertiary navigation container appears in the same location as the first one"/>
+  <a href="./images/blog/tertiary_nav/final_relative_problem.png">
+    <img src="./images/blog/tertiary_nav/final_relative_problem.png" alt="Second tertiary navigation container appears in the same location as the first one"/>
   </a>
 </figure>
 <p>
@@ -292,13 +292,13 @@ The first fix involves the <em>white-space</em> CSS property and setting this pr
 The second fix is a positioning issue because the nearest relative positioned element for the second tertiary container to position itself to is the same as the first tertiary container - we just need to make the <em>lis</em> position:relative. However, this reintroduces the top positioning issue but we can easily fix that by setting the top property equal to the padding of the <em>lis</em>
 </p>
 <figure id="final_whitespace_solution">
-  <a href="./img/tertiary_nav/final_whitespace_solution.png">
-    <img src="./img/tertiary_nav/final_whitespace_solution.png" alt="Whitespace issue with a tertiary link is now fixed"/>
+  <a href="./images/blog/tertiary_nav/final_whitespace_solution.png">
+    <img src="./images/blog/tertiary_nav/final_whitespace_solution.png" alt="Whitespace issue with a tertiary link is now fixed"/>
   </a>
 </figure>
 <figure id="final_relative_solution">
-  <a href="./img/tertiary_nav/final_relative_solution.png">
-    <img src="./img/tertiary_nav/final_relative_solution.png" alt="Second tertiary navigation container appears in the correct location"/>
+  <a href="./images/blog/tertiary_nav/final_relative_solution.png">
+    <img src="./images/blog/tertiary_nav/final_relative_solution.png" alt="Second tertiary navigation container appears in the correct location"/>
   </a>
 </figure>
 <p>
