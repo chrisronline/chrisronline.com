@@ -1,0 +1,58 @@
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font: normal 16px Tahoma;
+  display: none;
+}
+
+ul.primary, ul.primary li:hover ul.secondary, ul.secondary li:hover ul.tertiary {
+  display: block;
+}
+
+li {
+  padding: 0.4em;
+  margin: 0.4em 0;
+}
+
+.primary > li {
+  float: left;
+}
+
+.secondary-wrapper {
+  position: relative;
+}
+ul.secondary {
+  position: absolute;
+  white-space: nowrap;
+}
+
+ul.tertiary {
+  position: absolute;
+  top: -0.8em;
+  left: 0.4em;
+  white-space: nowrap;
+}
+
+.contains-tertiary {
+  float: left;
+}
+
+.tertiary-wrapper {
+  float: right;
+  position: relative;
+}
+
+.clear {
+  clear: both;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+ul { display: block; }
+li {background-color: yellow; }
+a { background-color: pink; }
+.primary { background-color: green; }
+.secondary { background-color: orange; }
+.tertiary { background-color: blue; }

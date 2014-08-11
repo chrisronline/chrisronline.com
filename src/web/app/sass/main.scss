@@ -8,3 +8,7 @@ $fa-font-path: "../fonts";
 
 @import "projects.scss";
 @import "blog.scss";
+
+a[onclick]:hover {
+  cursor: pointer;
+}

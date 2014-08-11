@@ -83,7 +83,7 @@
   };
 
   SinglePageNavigator.add({
-    regExp: /blog\/(.?)/,
+    regExp: /blog\/tags\/(.+)/,
     id: 'blog',
     handler: function(route) {
       if (!_.isEmpty(route.__matchedHash)) {

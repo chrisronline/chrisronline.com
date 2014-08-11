@@ -5,7 +5,7 @@ title: blog
   <h2>Thoughts</h2>
 </header>
 
-<h3>Tags</h3>
+<!-- <h3>Tags</h3>
 <ul class="tags">
   {{#blog.tags}}
   <li>
@@ -14,7 +14,7 @@ title: blog
   {{/blog.tags}}
 </ul>
 
-<h3>Posts</h3>
+<h3>Posts</h3> -->
 <ul class="posts">
   {{#blog.posts}}
   <li class="post" data-tags="{{tags}}">
@@ -24,10 +24,10 @@ title: blog
         <span>{{date}}</span>
       </h5>
       <h4>
-        <a href="#{{id}}">{{title}}</a>
+        <a href="#blog/post/{{id}}">{{title}}</a>
       </h4>
     </header>
-    <article id="{{id}}" data-navigate="post/{{id}}">
+    <article id="{{id}}" data-navigate="blog/post/{{id}}" data-blog-post>
       {{{content}}}
     </article>
   </li>

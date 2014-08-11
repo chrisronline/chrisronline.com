@@ -1,9 +1,18 @@
 #blog {
-  > h3 {
+  > h4 {
+    margin-top: -1rem;
     margin-bottom: 1rem;
+    a:hover {
+      color: $darkerGreen;
+      text-decoration: none;
+    }
+    i {
+      font-size: smaller;
+    }
   }
 
   .tags {
+    margin-bottom: 2rem;
     li {
       display: inline-block;
     }
@@ -12,18 +21,22 @@
       border: solid 2px $green;
       border-radius: 6px;
       font-size: 1rem;
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
+      display: block;
     }
     a:hover {
       cursor: pointer;
       text-decoration: none;
+      border-color: $darkerGreen;
     }
     a.active {
       background: $green;
       color: #fff;
     }
   }
+
   .post {
+    font-size: 1.2rem;
     margin-bottom: 2rem;
     h3, h4, h5 {
       margin-top: 0;
@@ -37,10 +50,24 @@
       }
     }
     article {
-      background: $green;
-      color: #fff;
+      border-left: solid 2px $green;
+      // background: $green;
+      // color: #fff;
       padding: 1rem;
-      margin-bottom: 2rem;
+      margin: 2rem 0;
+    }
+    iframe {
+      width: 100%;
+      border: none;
+      height: 20rem;
     }
   }
 }
+
+// #post-navigation {
+//   position: fixed;
+//   top: 30rem;
+//   left: 15rem;
+//   text-align: right;
+//   font-size: smaller;
+// }

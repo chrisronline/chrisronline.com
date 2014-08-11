@@ -37,11 +37,17 @@ var dev = {
   revDir: 'rev'
 };
 
-dev.vendor = [
-  dev.bowerSrc + '/jquery/dist/jquery.js',
-  dev.bowerSrc + '/react/react.js',
-  dev.bowerSrc + '/lodash/dist/lodash.js'
-];
+dev.vendor = {
+  scripts: [
+    dev.bowerSrc + '/jquery/dist/jquery.js',
+    dev.bowerSrc + '/react/react.js',
+    dev.bowerSrc + '/lodash/dist/lodash.js',
+    dev.bowerSrc + '/prism/prism.js'
+  ],
+  css: [
+    dev.bowerSrc + '/prism/themes/prism.css'
+  ]
+};
 
 gulp.task('compile-templates', function() {
   var content = [];
@@ -60,8 +66,10 @@ gulp.task('compile-templates', function() {
           }
         }
         else if (file.path.indexOf('posts') > -1) {
-          tags = tags.concat(file.frontMatter.tags.split(','));
-          posts.push(file);
+          if (_.size(file.frontMatter) > 0) {
+            tags = tags.concat(file.frontMatter.tags.split(','));
+            posts.push(file);
+          }
         }
         else {
           content.push(file);
@@ -79,8 +87,6 @@ gulp.task('compile-templates', function() {
         });
         model.blog.posts = [];
 
-        // console.log(model.blog);
-
         content.forEach(function(contentFile) {
           var title = contentFile.frontMatter.title;
           model.nav.push({ href: title, label: title });
@@ -90,7 +96,7 @@ gulp.task('compile-templates', function() {
         posts.forEach(function(postFile) {
           var post = postFile.frontMatter;
           post.content = postFile.contents.toString();
-          post.id = post.title.replace(/\s+/, '-').toLowerCase().replace('.', '-');
+          post.id = post.title.replace(/\s+/g, '-').toLowerCase().replace('.', '-');
           model.blog.posts.push(post);
         });
 
@@ -123,6 +129,8 @@ gulp.task('minify-images', function() {
     .pipe(gulp.dest(dev.imagesSrc));
 });
 gulp.task('compass', function() {
+  gulp.src(dev.vendor.css)
+    .pipe(gulp.dest(dev.cssDest));
   gulp.src(dev.sassSrc + '/*.scss')
     .pipe(plumber())
     .pipe(compass({
@@ -140,7 +148,7 @@ gulp.task('html', function() {
     .pipe(browserSync.reload({stream:true}));
 });
 gulp.task('vendor', function() {
-  gulp.src(dev.vendor)
+  gulp.src(dev.vendor.scripts)
     .pipe(concat('plugins.js'))
     .pipe(gulp.dest(dev.scriptsDest))
     .pipe(browserSync.reload({stream:true}));
@@ -151,10 +159,11 @@ gulp.task('watch', function() {
   gulp.watch(dev.sassSrc + '/**/*.scss', ['compass']);
   gulp.watch(dev.base + '/*.html', ['html', 'compile-templates']);
   gulp.watch(dev.templatesSrc + '/**/*.html', ['compile-templates']);
-  gulp.watch(dev.vendor, ['vendor']);
+  gulp.watch(dev.vendor.scripts, ['vendor']);
 });
 gulp.task('browser-sync', function() {
   browserSync({
+    open: false,
     server: {
       baseDir: 'app'
     }
