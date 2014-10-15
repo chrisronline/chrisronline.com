@@ -11,6 +11,13 @@
       loading: true
     },
     {
+      id: 'fork',
+      label: 'Forks',
+      fork: true,
+      projects: [],
+      loading: true
+    },
+    {
       id: 'misc',
       label: 'Misc',
       titleRegEx: /\\*/,
@@ -36,7 +43,12 @@
           }).reverse();
           _.each(repos, function(repo) {
             var category = _.find(categories, function(category) {
-              return category.titleRegEx.test(repo.name);
+              if (category.titleRegEx) {
+                return category.titleRegEx.test(repo.name);
+              }
+              if (category.fork) {
+                return repo.fork;
+              }
             });
             category.projects.push(repo);
             category.loading = false;
@@ -108,20 +120,35 @@
     }
   });
 
+  var ProjectHeader = React.createClass({
+    render: function() {
+      var project = this.props.project;
+      var forkIcon = '';
+      if (project.fork) {
+        forkIcon = <i className="fa fa-code-fork"></i>;
+      }
+      return (
+        <header>
+          <h4>
+            <a href={project.html_url}>
+              <i className="fa fa-github"></i>
+              &nbsp;
+              {project.name}
+              &nbsp;
+              {forkIcon}
+            </a>
+          </h4>
+        </header>
+      );
+    }
+  });
+
   var Project = React.createClass({
     render: function() {
       var project = this.props.project;
       return (
         <article className="project">
-          <header>
-            <h4>
-              <a href={project.html_url}>
-                <i className="fa fa-github"></i>
-                &nbsp;
-                {project.name}
-              </a>
-            </h4>
-          </header>
+          <ProjectHeader project={project}/>
           <p>{project.description}</p>
         </article>
       );

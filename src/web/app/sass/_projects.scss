@@ -8,6 +8,10 @@
       margin-bottom: 1rem;
     }
 
+    .fa-code-fork {
+      font-size: 1.25rem;
+    }
+
     p {
       @include breakpoint(default) {
         margin-left: 1.5rem;
