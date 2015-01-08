@@ -1,3 +1,0 @@
-RewriteEngine On
-RewriteRule ^api/([a-zA-Z0-9]+)$ api.php?method=$1
-RewriteRule ^api/([a-zA-Z0-9]+)/$ api.php?method=$1

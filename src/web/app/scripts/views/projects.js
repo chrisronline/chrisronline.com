@@ -36,26 +36,41 @@
     loadGitHubProjects: function() {
       var categories = this.props.categories;
       var self = this;
-      $.ajax('http://localhost:8082/api/repos').done(
+      var projects = [];
+      $.ajax('https://api.github.com/users/chrisronline/repos').done(
         function(repos) {
-          var repos = _.sortBy(repos, function(repo) {
-            return repo.stargazers_count || repo.commits.length;
-          }).reverse();
+          var count = repos.length;
           _.each(repos, function(repo) {
-            var category = _.find(categories, function(category) {
-              if (category.titleRegEx) {
-                return category.titleRegEx.test(repo.name);
+            $.ajax('https://api.github.com/repos/chrisronline/' + repo.name + '/commits').done(
+              function(commits) {
+                projects.push(_.extend(repo, { commits: commits }));
+                if (--count === 0) {
+                  init();
+                }
               }
-              if (category.fork) {
-                return repo.fork;
-              }
-            });
-            category.projects.push(repo);
-            category.loading = false;
+            );
           });
-          self.setState({categories: categories});
         }
       );
+
+      function init() {
+        var repos = _.sortBy(projects, function(repo) {
+          return repo.stargazers_count || repo.commits.length;
+        }).reverse();
+        _.each(repos, function(repo) {
+          var category = _.find(categories, function(category) {
+            if (category.titleRegEx) {
+              return category.titleRegEx.test(repo.name);
+            }
+            if (category.fork) {
+              return repo.fork;
+            }
+          });
+          category.projects.push(repo);
+          category.loading = false;
+        });
+        self.setState({categories: categories});
+      }
     },
     render: function() {
       var categoryNodes = this.state.categories.map(function(category, index) {
