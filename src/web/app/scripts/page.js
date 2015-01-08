@@ -63,13 +63,14 @@
     listen: function() {
       var self = this;
       $('*[href]').on('click', function(e) {
-        e.preventDefault();
-
         var target = $(e.currentTarget);
         var href = target.attr('href');
         var id = href.substring(1);
         var route = self.findRoute(id);
-        self.go(route);
+        if (route) {
+          e.preventDefault();
+          self.go(route);
+        }
       });
 
       var defaultRoute = this.findRoute(window.location.hash.substring(1)) || this.findRoute(self.__config.default);
