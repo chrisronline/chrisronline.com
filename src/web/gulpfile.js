@@ -3,7 +3,8 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var del = require('del');
-var compass = require('gulp-compass');
+var sass = require('gulp-sass');
+var autoprefixer = require('gulp-autoprefixer');
 var through = require('through2');
 var react = require('gulp-react');
 var plumber = require('gulp-plumber');
@@ -128,18 +129,23 @@ gulp.task('minify-images', function() {
     .pipe(imagemin({optimizationLevel: 5}))
     .pipe(gulp.dest(dev.imagesSrc));
 });
-gulp.task('compass', function() {
+gulp.task('sass', function() {
   gulp.src(dev.vendor.css)
     .pipe(gulp.dest(dev.cssDest));
   gulp.src(dev.sassSrc + '/*.scss')
     .pipe(plumber())
-    .pipe(compass({
-      import_path: dev.bowerSrc,
+    .pipe(sass({
+      errLogToConsole: true,
+      includePaths: [dev.bowerSrc],
       css: dev.cssDest,
       sass: dev.sassSrc,
       image: dev.imagesSrc
     }))
     .pipe(concat('main.css'))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    }))
     .pipe(gulp.dest(dev.cssDest))
     .pipe(browserSync.reload({stream:true}));
 });
@@ -156,7 +162,7 @@ gulp.task('vendor', function() {
 gulp.task('watch', function() {
   gulp.watch(dev.scriptsSrc + '/**/*.js', ['generate-scripts']);
   gulp.watch(dev.imagesSrc + '/**/*', ['minify-images']);
-  gulp.watch(dev.sassSrc + '/**/*.scss', ['compass']);
+  gulp.watch(dev.sassSrc + '/**/*.scss', ['sass']);
   gulp.watch(dev.base + '/*.html', ['html', 'compile-templates']);
   gulp.watch(dev.templatesSrc + '/**/*.html', ['compile-templates']);
   gulp.watch(dev.vendor.scripts, ['vendor']);
@@ -183,7 +189,7 @@ gulp.task('build-scripts', ['clean', 'generate-scripts', 'vendor'], function() {
     .pipe(rev.manifest())
     .pipe(gulp.dest(dev.revDir + '/js'));
 });
-gulp.task('build-css', ['clean', 'minify-images', 'compass'], function() {
+gulp.task('build-css', ['clean', 'minify-images', 'sass'], function() {
   return gulp.src(dev.cssDest + '/*.css')
     .pipe(minifycss({keepBreaks:true}))
     .pipe(rev())
@@ -220,6 +226,6 @@ gulp.task('default', [
   'compile-templates',
   'vendor',
   'minify-images',
-  'compass',
+  'sass',
   'browser-sync'
 ]);

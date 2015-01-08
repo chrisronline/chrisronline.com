@@ -20,7 +20,7 @@
     display: inline-block;
     border-bottom: solid 2px transparent;
     padding: 0.3rem;
-    @include transition(color 0.5s);
+    transition: color 0.5s;
   }
 
   a:hover {
