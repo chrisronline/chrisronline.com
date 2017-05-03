@@ -1,0 +1,77 @@
+@import "shared/sass/variables.scss";
+@import "shared/sass/mixins.scss";
+$fa-font-path: "../../assets/fonts";
+@import "font-awesome/scss/font-awesome.scss";
+@import "normalize.scss";
+
+html, body {
+  font-family: 'Montserrat', 'Arial', serif;
+  color: #555;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+nav {
+  color: #111;
+  font-variant: small-caps;
+  text-transform: lowercase;
+}
+
+h1 {
+  font-size: 2.4rem;
+  @include breakpoint(small) {
+    font-size: 2rem;
+    text-align: center;
+  }
+}
+h2 {
+  font-size: 4rem;
+  @include breakpoint(small) {
+    font-size: 3rem;
+  }
+}
+h3 { font-size: 2rem; }
+h4 { font-size: 1.8rem; }
+
+h2 {
+  margin-bottom: 2rem;
+  margin-top: 0;
+}
+
+a {
+  text-decoration: none;
+  color: $green;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+section {
+  @include breakpoint(small) {
+    text-align: center;
+  }
+  font-size: 1.4rem;
+}
+
+.fa {
+  vertical-align: middle;
+}
+
+.fa-2x { font-size: 2rem; }
+.fa-3x { font-size: 3rem; }
+.fa-4x { font-size: 4rem; }
+
+a[onclick]:hover {
+  cursor: pointer;
+}

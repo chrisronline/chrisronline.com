@@ -1,0 +1,47 @@
+@import "shared/sass/variables.scss";
+@import "shared/sass/mixins.scss";
+@import "shared/sass/global.scss";
+
+.app-header, #content {
+  @include breakpoint(default) {
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+
+.app-header {
+  margin: 8rem 0 0 6rem;
+  text-align: right;
+  @include clear();
+
+  @include breakpoint(small) {
+    margin: 0;
+    text-align: left;
+    padding: 1rem;
+  }
+}
+
+.app-heading {
+  margin: 0;
+}
+
+#content {
+  width: 640px;
+  margin: 2rem;
+
+  @include breakpoint(small) {
+    width: auto;
+    padding: 1rem;
+    margin: -1rem 0 0 0;
+  }
+}
+
+.svisible {
+  opacity: 0;
+}
+
+.visible {
+  transition: opacity 1s, transform 0.2s;
+  opacity: 1;
+  transform: perspective(0) translate(0,0);
+}

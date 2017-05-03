@@ -1,0 +1,22 @@
+@import "shared/sass/variables.scss";
+@import "shared/sass/mixins.scss";
+
+.project {
+  @include breakpoint(default) {
+    margin-left: 1rem;
+  }
+}
+
+.project-heading {
+  margin-bottom: 1rem;
+}
+
+.fa-code-fork {
+  font-size: 1.25rem;
+}
+
+.project-description {
+  @include breakpoint(default) {
+    margin-left: 1.5rem;
+  }
+}

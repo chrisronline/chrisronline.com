@@ -1,0 +1,60 @@
+@import "shared/sass/variables.scss";
+@import "shared/sass/mixins.scss";
+
+.site-nav {
+  font-size: 1.2rem;
+}
+
+.nav-item {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.nav-link, .external-link {
+  font-size: larger;
+  display: inline-block;
+  border-bottom: solid 2px transparent;
+  padding: 0.3rem;
+  transition: color 0.5s;
+}
+
+.nav-link:hover {
+  color: $darkerGreen;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  color: $darkerGreen;
+  border-bottom-color: $green;
+}
+
+.external-links {
+  margin-top: 2rem;
+
+  .external-item {
+    display: inline-block;
+  }
+
+  .nav-text {
+    display: none;
+  }
+}
+
+.nav-mobile {
+  display: none;
+}
+
+@include breakpoint(small) {
+  .nav-item {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .site-links {
+    text-align: center;
+  }
+
+  .external-links {
+    margin-top: 0;
+  }
+}
