@@ -3,7 +3,6 @@ import ChrisProfilePicture from '../../media/images/chris.jpg';
 import './home.scss';
 
 export const Home = () => {
-  console.log({ ChrisProfilePicture })
   return (
     <section className="about-page">
       <header>

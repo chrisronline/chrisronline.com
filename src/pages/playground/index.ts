@@ -1,1 +1,2 @@
-export { PlayGround } from './playground';
+export { Playground } from './playground';
+export { PlaygroundProjects } from './projects';
