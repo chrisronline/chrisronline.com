@@ -1,15 +1,6 @@
-import React, {
-  createRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { createRef, useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  solid,
-} from '@fortawesome/fontawesome-svg-core/import.macro';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { ConfigContext } from '../../../../context';
 import { CatsApiImage } from '../../../../types';
 import { FETCH_WHEN_THIS_PIXELS_AWAY } from './config';
@@ -47,7 +38,7 @@ const useInfiniteScroll = (
     }
   }
 
-  return { isFetching, setIsFetching };
+  return { setIsFetching };
 };
 
 export const InfiniteScrollReact = () => {
@@ -56,7 +47,7 @@ export const InfiniteScrollReact = () => {
   const [perPage, setPerPage] = useState(10);
   const scrollingContainer = createRef<HTMLDivElement>();
   const [cats, setCats] = useState<CatsApiImage[]>([]);
-  const { isFetching, setIsFetching } = useInfiniteScroll(
+  const { setIsFetching } = useInfiniteScroll(
     loadMoreImages,
     () => scrollingContainer.current
   );
