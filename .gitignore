@@ -1,5 +1,3 @@
-bower_components
 node_modules
-dist
-deploy
+public/dist
 .DS_Store
