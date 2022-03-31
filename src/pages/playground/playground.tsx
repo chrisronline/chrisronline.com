@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { PLAYGROUND_PROJECTS } from './config';
-// import './playground.scss';
+import './playground.scss';
 
 export const Playground = () => {
   return (
@@ -12,9 +12,9 @@ export const Playground = () => {
       <ul>
         {PLAYGROUND_PROJECTS.map((project) => (
           <li key={project.url}>
-            <article className="project">
+            <article className="playground-project">
               <header>
-                <h4 className="project-heading">
+                <h4 className="playground-project-heading">
                   <NavLink className="nav-link" to={`/playground/projects/${project.url}`}>
                     {project.label}
                   </NavLink>

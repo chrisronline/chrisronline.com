@@ -1,11 +1,25 @@
 import React from 'react';
-import { PAGES } from '../../config';
 import { NavLink, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { brands } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 import './nav.scss';
 import { SubNav } from './subnav';
+import { NavPage } from '../../types';
+import { PlaygroundProjectEnum } from '../../pages/playground/types';
+import { getPlaygroundProjectLabel } from '../../lib/playground_project_label';
+
+const PAGES: NavPage[] = [
+  { page: 'home' },
+  { page: 'projects' },
+  {
+    page: 'playground',
+    subpagePath: 'projects',
+    subpages: Object.values(PlaygroundProjectEnum).map((page) => {
+      return { page, label: getPlaygroundProjectLabel(page) };
+    }),
+  },
+];
 
 const externalLinks = [
   {
@@ -24,7 +38,7 @@ const externalLinks = [
 
 export const Nav: React.FunctionComponent = () => {
   const location = useLocation();
-  const navLinks = PAGES.map(({ page, subpages }) => {
+  const navLinks = PAGES.map(({ page, subpagePath, subpages }) => {
     const link = `/${page === 'home' ? '' : page}`;
     return (
       <li className="nav-item" key={page}>
@@ -32,7 +46,10 @@ export const Nav: React.FunctionComponent = () => {
           {page[0].toUpperCase() + page.substring(1)}
         </NavLink>
         {subpages && location.pathname.startsWith(link) ? (
-          <SubNav pages={subpages} />
+          <SubNav
+            parent={subpagePath ? `${page}/${subpagePath}` : page}
+            pages={subpages}
+          />
         ) : null}
       </li>
     );

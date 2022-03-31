@@ -6,7 +6,7 @@ import { CatsApiImage } from '../../../../types';
 import { FETCH_WHEN_THIS_PIXELS_AWAY } from './config';
 
 const useInfiniteScroll = (
-  callback: Function,
+  callback: () => void,
   getScrollingContainer: () => HTMLDivElement
 ) => {
   const [isFetching, setIsFetching] = useState(false);
@@ -73,25 +73,19 @@ export const InfiniteScrollReact = () => {
   }, [page]);
 
   return (
-    <section>
-      <header>
-        <h2>Infinite Scroll</h2>
-        <h3>React</h3>
-      </header>
-      <div className="scroll-container" ref={scrollingContainer}>
-        <ul>
-          {cats.map((cat) => (
-            <li key={cat.id}>
-              <article className="cat">
-                <img src={cat.url} className="image" />
-              </article>
-            </li>
-          ))}
-          <li className="infinite-loading-indicator">
-            <FontAwesomeIcon icon={solid('spinner')} spin />
+    <div className="scroll-container" ref={scrollingContainer}>
+      <ul>
+        {cats.map((cat) => (
+          <li key={cat.id}>
+            <article className="cat">
+              <img src={cat.url} className="image" />
+            </article>
           </li>
-        </ul>
-      </div>
-    </section>
+        ))}
+        <li className="infinite-loading-indicator">
+          <FontAwesomeIcon icon={solid('spinner')} spin={true} />
+        </li>
+      </ul>
+    </div>
   );
 };

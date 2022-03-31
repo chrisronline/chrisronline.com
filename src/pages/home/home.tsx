@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import ChrisProfilePicture from '../../media/images/chris.jpg';
 import './home.scss';
 
@@ -20,5 +20,5 @@ export const Home = () => {
         <a href="https://www.elastic.co">Elastic</a>.
       </p>
     </section>
-  )
-}
+  );
+};

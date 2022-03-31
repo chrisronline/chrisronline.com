@@ -1,2 +1,2 @@
 export * from './nav';
-export { RenderVanilla } from './render_vanilla';
+export * from './render_vanilla';

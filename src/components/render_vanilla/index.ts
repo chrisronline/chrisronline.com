@@ -1,0 +1,1 @@
+export { RenderVanilla } from './render_vanilla';

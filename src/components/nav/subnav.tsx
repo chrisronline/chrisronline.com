@@ -1,33 +1,25 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { SubNavPage } from '../../types';
 
 export interface SubNavProps {
   pages: SubNavPage[];
+  parent: string;
 }
-export const SubNav: React.FunctionComponent<SubNavProps> = ({ pages }) => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search.slice(1));
-  
+export const SubNav: React.FunctionComponent<SubNavProps> = ({
+  parent,
+  pages,
+}) => {
   return (
     <ul className="site-sublinks">
-      {pages.map(({ page, usesQueryString, queryStringKey }) => {
-        let classes = 'nav-link';
-        if (params.get(queryStringKey) === page) {
-          classes += ' active';
-        }
-
-        let to = page;
-        if (usesQueryString) {
-          to = `?${queryStringKey}=${page}`
-        }
+      {pages.map(({ page, label }) => {
+        const pageName = label ?? page;
+        const fullPage = `${parent}/${page}`;
         return (
           <li className="nav-item" key={page}>
-            <Link className={classes} to={to}>
-              {page[0].toUpperCase() + page.substring(1)}
-            </Link>
+            <NavLink className="nav-link" to={fullPage}>
+              {pageName[0].toUpperCase() + pageName.substring(1)}
+            </NavLink>
           </li>
         );
       })}

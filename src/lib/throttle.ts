@@ -1,4 +1,4 @@
-export function throttle(callback: Function, ms: number) {
+export function throttle(callback: () => void, ms: number) {
   let waiting = false;
   return (...args: any) => {
     if (waiting) return;

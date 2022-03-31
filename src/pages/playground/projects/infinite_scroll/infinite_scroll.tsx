@@ -15,8 +15,4 @@ export const InfiniteScroll: React.FunctionComponent<InfiniteScrollProps> = ({ r
     case RendererTypes.Vanilla:
       return <RenderVanilla render={renderIntoApp} />
   }
-
-  return (
-    <h1>Not found</h1>
-  )
 }

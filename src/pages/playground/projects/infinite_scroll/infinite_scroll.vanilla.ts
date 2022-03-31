@@ -58,7 +58,7 @@ export function renderIntoApp(parent: HTMLElement) {
     }
   }
 
-  function onLeave(event: BeforeUnloadEvent) {
+  function onLeave() {
     window.removeEventListener('beforeunload', onLeave);
     nodeCache
       .get(Element.scrollContainer)
@@ -68,17 +68,6 @@ export function renderIntoApp(parent: HTMLElement) {
   function setupListeners() {
     window.addEventListener('beforeunload', onLeave);
     nodeCache.get(Element.scrollContainer).addEventListener('scroll', onScroll);
-  }
-
-  function renderHeader() {
-    const header = document.createElement('header');
-    const title = document.createElement('h2');
-    title.appendChild(document.createTextNode('Infinite Scroll'));
-    const subtitle = document.createElement('h3');
-    subtitle.appendChild(document.createTextNode('Vanilla'));
-    header.appendChild(title);
-    header.appendChild(subtitle);
-    return header;
   }
 
   function renderCats() {
@@ -99,30 +88,33 @@ export function renderIntoApp(parent: HTMLElement) {
     }
 
     nodeCache
-        .get(Element.list)
-        .insertBefore(fragment, nodeCache.get(Element.loader));
+      .get(Element.list)
+      .insertBefore(fragment, nodeCache.get(Element.loader));
   }
 
   function initialRender() {
-    const section = document.createElement('section');
-    section.appendChild(renderHeader());
-
+    // <div class="scroll-container">
     const scrollContainer = document.createElement('div');
     scrollContainer.setAttribute('class', 'scroll-container');
+
+    // <ul>
     const catList = document.createElement('ul');
-    nodeCache.set(Element.list, catList);
+    nodeCache.set(Element.list, catList); // Cache for easier access
     renderCats();
+
+    // <li class="infinite-loading-indicator">
     const loader = document.createElement('li');
     loader.setAttribute('class', 'infinite-loading-indicator');
+
+    // <i>Loading...</li>
     const spinnerIcon = document.createElement('i');
     spinnerIcon.appendChild(document.createTextNode('Loading...'));
+
     loader.appendChild(spinnerIcon);
     nodeCache.set(Element.loader, loader);
     catList.appendChild(loader);
     nodeCache.set(Element.scrollContainer, scrollContainer);
     scrollContainer.appendChild(catList);
-    section.appendChild(scrollContainer);
-
-    parent.appendChild(section);
+    parent.appendChild(scrollContainer);
   }
 }

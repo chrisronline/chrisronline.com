@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  solid,
-  regular,
-  brands,
-} from '@fortawesome/fontawesome-svg-core/import.macro';
-
+import { solid, brands } from '@fortawesome/fontawesome-svg-core/import.macro';
 import './projects.scss';
 
 export const Projects = () => {
@@ -17,8 +12,8 @@ export const Projects = () => {
     const response = await fetch(
       'https://api.github.com/users/chrisronline/repos'
     );
-    const projects = await response.json();
-    setProjects(projects);
+    const result = await response.json();
+    setProjects(result);
     setIsLoading(false);
   }
 
@@ -33,7 +28,7 @@ export const Projects = () => {
       </header>
       {isLoading ? (
         <div>
-          <FontAwesomeIcon icon={solid('spinner')} spin />
+          <FontAwesomeIcon icon={solid('spinner')} spin={true} />
         </div>
       ) : null}
       <ul>
@@ -47,7 +42,9 @@ export const Projects = () => {
                     &nbsp;
                     {project.name}
                     &nbsp;
-                    {project.fork ? <FontAwesomeIcon icon={solid('code-fork')} /> : null}
+                    {project.fork ? (
+                      <FontAwesomeIcon icon={solid('code-fork')} />
+                    ) : null}
                   </a>
                 </h4>
               </header>

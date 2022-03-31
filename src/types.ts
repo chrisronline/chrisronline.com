@@ -13,11 +13,11 @@ export interface CatsApiImage {
 
 export interface NavPage {
   page: string;
+  subpagePath?: string;
   subpages?: SubNavPage[];
 }
 
 export interface SubNavPage {
   page: string;
-  usesQueryString?: boolean;
-  queryStringKey?: string;
+  label?: string;
 }
