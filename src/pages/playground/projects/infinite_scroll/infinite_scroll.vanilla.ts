@@ -1,6 +1,7 @@
 import { getConfig } from '../../../../config';
 import { CatsApiImage, PrivateConfig } from '../../../../types';
 import { FETCH_WHEN_THIS_PIXELS_AWAY } from './config';
+import './infinite_scroll.scss';
 
 enum Element {
   scrollContainer,

@@ -4,9 +4,10 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { capitalize } from '../../../lib/capitalize';
 import { getPlaygroundProjectLabel } from '../../../lib/playground_project_label';
 import { PlaygroundProjectEnum, RendererTypes } from '../types';
-import { InfiniteScroll } from './infinite_scroll';
-import { Slider } from './slider';
+import { InfiniteScrollReact, renderInfiniteScroll } from './infinite_scroll';
+import { SliderReact, renderSlider } from './slider';
 import './playground_projects.scss';
+import { RenderVanilla } from '../../../components';
 
 const RENDERER_PARAM = 'renderer';
 export const PlaygroundProjects = () => {
@@ -24,17 +25,19 @@ export const PlaygroundProjects = () => {
   function renderProject() {
     switch (projectId) {
       case PlaygroundProjectEnum.INFINITE_SCROLL:
-        return (
-          <InfiniteScroll
-            renderer={searchParams.get(RENDERER_PARAM) as RendererTypes}
-          />
-        );
+        switch (searchParams.get(RENDERER_PARAM)) {
+          case RendererTypes.React:
+            return <InfiniteScrollReact />;
+          case RendererTypes.Vanilla:
+            return <RenderVanilla render={renderInfiniteScroll} />
+        }
       case PlaygroundProjectEnum.SLIDER:
-        return (
-          <Slider
-            renderer={searchParams.get(RENDERER_PARAM) as RendererTypes}
-          />
-        );
+        switch (searchParams.get(RENDERER_PARAM)) {
+          case RendererTypes.React:
+            return <SliderReact />;
+          case RendererTypes.Vanilla:
+            return <RenderVanilla render={renderSlider} />
+        }
     }
   }
 

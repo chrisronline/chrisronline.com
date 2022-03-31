@@ -1,1 +1,2 @@
-export { Slider } from './slider';
+export { SliderReact } from './slider.react';
+export { renderIntoApp as renderSlider } from './slider.vanilla';

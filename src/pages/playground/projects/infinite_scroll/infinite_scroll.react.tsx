@@ -4,12 +4,13 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { ConfigContext } from '../../../../context';
 import { CatsApiImage } from '../../../../types';
 import { FETCH_WHEN_THIS_PIXELS_AWAY } from './config';
+import './infinite_scroll.scss';
 
 const useInfiniteScroll = (
   callback: () => void,
   getScrollingContainer: () => HTMLDivElement
 ) => {
-  const [isFetching, setIsFetching] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getScrollingContainer().addEventListener('scroll', onScroll);
@@ -18,12 +19,12 @@ const useInfiniteScroll = (
   }, []);
 
   useEffect(() => {
-    if (!isFetching) return;
+    if (!isLoading) return;
     callback();
-  }, [isFetching]);
+  }, [isLoading]);
 
   function onScroll(event: Event) {
-    if (isFetching) return;
+    if (isLoading) return;
     const element = event.target as HTMLDivElement;
     const loadingIndicator = element.querySelector(
       '.infinite-loading-indicator'
@@ -34,11 +35,11 @@ const useInfiniteScroll = (
         element.clientHeight +
         loadingIndicator.clientHeight);
     if (distanceFromBottom <= FETCH_WHEN_THIS_PIXELS_AWAY) {
-      setIsFetching(true);
+      setIsLoading(true);
     }
   }
 
-  return { setIsFetching };
+  return { setIsLoading };
 };
 
 export const InfiniteScrollReact = () => {
@@ -47,12 +48,12 @@ export const InfiniteScrollReact = () => {
   const [perPage] = useState(10);
   const scrollingContainer = createRef<HTMLDivElement>();
   const [cats, setCats] = useState<CatsApiImage[]>([]);
-  const { setIsFetching } = useInfiniteScroll(
-    loadMoreImages,
+  const { setIsLoading } = useInfiniteScroll(
+    loadMoreCats,
     () => scrollingContainer.current
   );
 
-  async function loadCommits() {
+  async function loadCats() {
     const headers = new Headers();
     headers.append('x-api-key', catsApiKey as string);
     const url = `https://api.thecatapi.com/v1/images/search?size=thumb&order=desc&page=${page}&limit=${perPage}`;
@@ -61,15 +62,15 @@ export const InfiniteScrollReact = () => {
     });
     const body = await response.json();
     setCats([...cats, ...body]);
-    setIsFetching(false);
+    setIsLoading(false);
   }
 
-  function loadMoreImages() {
+  function loadMoreCats() {
     setPage(page + 1);
   }
 
   useEffect(() => {
-    loadCommits();
+    loadCats();
   }, [page]);
 
   return (
