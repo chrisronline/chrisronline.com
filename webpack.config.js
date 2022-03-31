@@ -76,6 +76,6 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public/dist'),
     publicPath: path.join(__dirname, 'public'),
-    assetModuleFilename: 'images/[hash][ext][query]'
+    assetModuleFilename: './images/[hash][ext][query]'
   },
 };
