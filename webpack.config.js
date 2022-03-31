@@ -16,8 +16,8 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        use: ["source-map-loader"],
-        enforce: "pre"
+        use: ['source-map-loader'],
+        enforce: 'pre',
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -45,7 +45,7 @@ module.exports = {
             },
           },
         ],
-      }
+      },
     ],
   },
   resolve: {
@@ -76,5 +76,6 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public/dist'),
     publicPath: path.join(__dirname, 'public'),
+    assetModuleFilename: 'images/[hash][ext][query]'
   },
 };
