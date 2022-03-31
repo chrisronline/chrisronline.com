@@ -6,7 +6,6 @@ enum Element {
   scrollContainer,
   list,
   loader,
-  last,
 }
 
 export function renderIntoApp(parent: HTMLElement) {
@@ -85,9 +84,7 @@ export function renderIntoApp(parent: HTMLElement) {
   function renderCats() {
     let catLi;
 
-    // if (nodeCache.has(Element.last)) {
-
-    // }
+    const fragment = document.createDocumentFragment();
 
     for (const cat of state.cats) {
       catLi = document.createElement('li');
@@ -98,12 +95,12 @@ export function renderIntoApp(parent: HTMLElement) {
       catImage.setAttribute('class', 'image');
       catArticle.appendChild(catImage);
       catLi.appendChild(catArticle);
-      nodeCache
-        .get(Element.list)
-        .insertBefore(catLi, nodeCache.get(Element.loader));
+      fragment.appendChild(catLi);
     }
 
-    // nodeCache.set(Element.last, catLi);
+    nodeCache
+        .get(Element.list)
+        .insertBefore(fragment, nodeCache.get(Element.loader));
   }
 
   function initialRender() {
