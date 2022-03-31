@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Home } from './pages/home';
-import { Nav } from './nav';
+import { Nav } from './components';
 import { Playground, PlaygroundProjects } from './pages/playground';
 import { Projects } from './pages/projects';
 import './app.scss';

@@ -14,7 +14,7 @@ const useInfiniteScroll = (
   useEffect(() => {
     getScrollingContainer().addEventListener('scroll', onScroll);
     return () =>
-      getScrollingContainer().removeEventListener('scroll', onScroll);
+      getScrollingContainer()?.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const useInfiniteScroll = (
 export const InfiniteScrollReact = () => {
   const { catsApiKey } = useContext(ConfigContext);
   const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage] = useState(10);
   const scrollingContainer = createRef<HTMLDivElement>();
   const [cats, setCats] = useState<CatsApiImage[]>([]);
   const { setIsFetching } = useInfiniteScroll(
@@ -56,7 +56,6 @@ export const InfiniteScrollReact = () => {
     const headers = new Headers();
     headers.append('x-api-key', catsApiKey as string);
     const url = `https://api.thecatapi.com/v1/images/search?size=thumb&order=desc&page=${page}&limit=${perPage}`;
-    console.log('loadCommits()', { page });
     const response = await fetch(url, {
       headers,
     });

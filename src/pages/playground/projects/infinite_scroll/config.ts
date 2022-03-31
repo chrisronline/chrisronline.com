@@ -1,1 +1,1 @@
-export const FETCH_WHEN_THIS_PIXELS_AWAY = 200;
+export const FETCH_WHEN_THIS_PIXELS_AWAY = 400;

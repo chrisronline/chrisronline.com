@@ -1,5 +1,5 @@
-@import './scss/variables.scss';
-@import './scss/mixins.scss';
+@import '../../scss/variables';
+@import '../../scss/mixins.scss';
 
 .site-nav {
   font-size: 1.2rem;
@@ -27,6 +27,16 @@
 .nav-link.active {
   color: $darkerGreen;
   border-bottom-color: $green;
+}
+
+.site-sublinks {
+  .nav-item:not(:first-child) {
+    margin: -0.75rem 0;
+  }
+
+  .nav-link {
+    font-size: smaller;
+  }
 }
 
 .external-links {
