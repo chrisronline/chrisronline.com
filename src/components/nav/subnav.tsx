@@ -11,7 +11,7 @@ export const SubNav: React.FunctionComponent<SubNavProps> = ({
   pages,
 }) => {
   return (
-    <ul className="site-sublinks">
+    <>
       {pages.map(({ page, label }) => {
         const pageName = label ?? page;
         const fullPage = `${parent}/${page}`;
@@ -23,6 +23,6 @@ export const SubNav: React.FunctionComponent<SubNavProps> = ({
           </li>
         );
       })}
-    </ul>
+    </>
   );
 };

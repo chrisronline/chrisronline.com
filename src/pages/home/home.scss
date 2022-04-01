@@ -1,8 +1,16 @@
+@import '../../scss/mixins.scss';
+
 .chris-selfie {
   max-width: 150px;
   max-height: 150px;
   border-radius: 20px;
   float: left;
+}
+
+@include breakpoint(small) {
+  .chris-selfie {
+    float: none;
+  }
 }
 
 .about-copy {

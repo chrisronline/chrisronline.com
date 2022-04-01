@@ -9,4 +9,8 @@ export const PLAYGROUND_PROJECTS = [
     url: PlaygroundProjectEnum.SLIDER,
     label: 'Slider',
   },
+  {
+    url: PlaygroundProjectEnum.TIC_TAC_TOE,
+    label: 'Tic Tac Toe',
+  },
 ];

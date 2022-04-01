@@ -11,7 +11,6 @@ import { getPlaygroundProjectLabel } from '../../lib/playground_project_label';
 
 const PAGES: NavPage[] = [
   { page: 'home' },
-  { page: 'projects' },
   {
     page: 'playground',
     subpagePath: 'projects',
@@ -19,6 +18,7 @@ const PAGES: NavPage[] = [
       return { page, label: getPlaygroundProjectLabel(page) };
     }),
   },
+  { page: 'projects' },
 ];
 
 const externalLinks = [
@@ -38,18 +38,25 @@ const externalLinks = [
 
 export const Nav: React.FunctionComponent = () => {
   const location = useLocation();
-  const navLinks = PAGES.map(({ page, subpagePath, subpages }) => {
+  let activePage: NavPage = null;
+  const navLinks = PAGES.map((routePage) => {
+    const { page, subpages, subpagePath } = routePage;
     const link = `/${page === 'home' ? '' : page}`;
+    if (location.pathname.startsWith(link)) {
+      activePage = routePage;
+    }
     return (
       <li className="nav-item" key={page}>
         <NavLink className="nav-link" to={link}>
           {page[0].toUpperCase() + page.substring(1)}
         </NavLink>
         {subpages && location.pathname.startsWith(link) ? (
-          <SubNav
-            parent={subpagePath ? `${page}/${subpagePath}` : page}
-            pages={subpages}
-          />
+          <ul className="site-sublinks">
+            <SubNav
+              parent={subpagePath ? `${page}/${subpagePath}` : page}
+              pages={subpages}
+            />
+          </ul>
         ) : null}
       </li>
     );
@@ -70,6 +77,18 @@ export const Nav: React.FunctionComponent = () => {
   return (
     <nav className="site-nav">
       <ul className="site-links">{navLinks}</ul>
+      <ul className="mobile-sublinks">
+        {activePage && activePage.subpages ? (
+          <SubNav
+            parent={
+              activePage.subpagePath
+                ? `${activePage.page}/${activePage.subpagePath}`
+                : activePage.page
+            }
+            pages={activePage.subpages}
+          />
+        ) : null}
+      </ul>
       <ul className="external-links">{externalNavLinks}</ul>
     </nav>
   );
