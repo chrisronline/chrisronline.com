@@ -1,0 +1,73 @@
+@import "../../../../scss/variables";
+
+.ttt-status, .ttt-turn {
+  text-align: center;
+}
+
+.ttt-turn {
+  margin: -2rem 0 2rem 0;
+}
+
+.ttt-reset {
+  padding: 0.5rem;
+  color: $green;
+  border: solid 2px $green;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  background-color: white;
+}
+
+.ttt-row {
+  border-top: solid 2px $green;
+  border-bottom: solid 2px $green;
+  height: 100px;
+  display: flex;
+
+  .ttt-col:first-child {
+    border-left-color: transparent;
+  }
+
+  .ttt-col:last-child {
+    border-right-color: transparent;
+  }
+
+  &:first-child {
+    border-top-color: transparent;
+    border-bottom-width: 1px;
+  }
+  &:last-child {
+    border-bottom-color: transparent;
+    border-top-width: 1px;
+
+    .ttt-col:first-child {
+      border-left-color: transparent;
+    }
+    .ttt-col:last-child {
+      border-right-color: transparent;
+    }
+  }
+}
+
+.ttt-col {
+  flex: 1;
+  border-left: solid 2px $green;
+  border-right: solid 2px $green;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:first-child {
+    border-right-color: transparent;
+  }
+  &:last-child {
+    border-left-color: transparent;
+  }
+}
+
+.ttl-player-X {
+  color: $green;
+}
+.ttl-player-O {
+  color: black;
+}

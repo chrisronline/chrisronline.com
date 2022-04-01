@@ -6,6 +6,7 @@ import { getPlaygroundProjectLabel } from '../../../lib/playground_project_label
 import { PlaygroundProjectEnum, RendererTypes } from '../types';
 import { InfiniteScrollReact, renderInfiniteScroll } from './infinite_scroll';
 import { SliderReact, renderSlider } from './slider';
+import { TicTacToeReact, renderTicTacToe } from './tic_tac_toe';
 import './playground_projects.scss';
 import { RenderVanilla } from '../../../components';
 
@@ -37,6 +38,13 @@ export const PlaygroundProjects = () => {
             return <SliderReact />;
           case RendererTypes.Vanilla:
             return <RenderVanilla render={renderSlider} />
+        }
+      case PlaygroundProjectEnum.TIC_TAC_TOE:
+        switch (searchParams.get(RENDERER_PARAM)) {
+          case RendererTypes.React:
+            return <TicTacToeReact />;
+          case RendererTypes.Vanilla:
+            return <RenderVanilla render={renderTicTacToe} />
         }
     }
   }

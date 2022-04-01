@@ -30,8 +30,13 @@
 }
 
 .site-sublinks {
+  .nav-item:first-child {
+    margin-top: 0;
+    margin-bottom: -0.1rem;
+  }
   .nav-item:not(:first-child) {
-    margin: -0.5rem 0;
+    margin-top: 0.1rem;
+    margin-bottom: 0;
   }
 
   .nav-link {
