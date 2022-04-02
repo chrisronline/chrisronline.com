@@ -1,11 +1,13 @@
 import { PlaygroundProjectEnum } from '../pages/playground/types';
 
 export function getPlaygroundProjectLabel(project: PlaygroundProjectEnum) {
-  if (project === PlaygroundProjectEnum.INFINITE_SCROLL) {
-    return 'Infinite Scroll';
-  }
-  if (project === PlaygroundProjectEnum.TIC_TAC_TOE) {
-    return 'Tic Tac Toe';
+  switch (project) {
+    case PlaygroundProjectEnum.INFINITE_SCROLL:
+      return 'Infinite Scroll';
+    case PlaygroundProjectEnum.TIC_TAC_TOE:
+      return 'Tic Tac Toe';
+    case PlaygroundProjectEnum.PHONE_INPUT:
+      return 'Phone Input';
   }
   return project;
 }

@@ -7,6 +7,7 @@ import { PlaygroundProjectEnum, RendererTypes } from '../types';
 import { InfiniteScrollReact, renderInfiniteScroll } from './infinite_scroll';
 import { SliderReact, renderSlider } from './slider';
 import { TicTacToeReact, renderTicTacToe } from './tic_tac_toe';
+import { PhoneInputReact } from './phone_input';
 import './playground_projects.scss';
 import { RenderVanilla } from '../../../components';
 
@@ -45,6 +46,13 @@ export const PlaygroundProjects = () => {
             return <TicTacToeReact />;
           case RendererTypes.Vanilla:
             return <RenderVanilla render={renderTicTacToe} />
+        }
+      case PlaygroundProjectEnum.PHONE_INPUT:
+        switch (searchParams.get(RENDERER_PARAM)) {
+          case RendererTypes.React:
+            return <PhoneInputReact />;
+          // case RendererTypes.Vanilla:
+          //   return <RenderVanilla render={renderTicTacToe} />
         }
     }
   }

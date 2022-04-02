@@ -1,0 +1,48 @@
+@import "../../../../scss/variables";
+
+.phone_input {
+  position: relative;
+}
+
+.phone_input_number {
+  padding: 0.2rem;
+  // border-color: transparent;
+  // &:focus, &:active {
+  //   border-color: transparent;
+  // }
+
+  /* Chrome, Safari, Edge, Opera */
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  &[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  // &.has_numbers {
+  //   color: transparent;
+  //   caret-color: black;
+  // }
+
+  // &.has_area_code {
+  //   padding-left: 17px;
+  // }
+
+  // &.has_both_parts {
+  //   padding-left: 25px;
+  // }
+}
+
+// .phone_input_mask {
+//   position: absolute;
+//   top: 0px;
+//   border: solid 2px $green;
+//   height: 30px;
+//   width: 254px;
+//   pointer-events: none;
+//   padding: 0.1rem;
+// }

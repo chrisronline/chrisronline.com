@@ -13,10 +13,10 @@ const PAGES: NavPage[] = [
   { page: 'home' },
   {
     page: 'playground',
-    subpagePath: 'projects',
-    subpages: Object.values(PlaygroundProjectEnum).map((page) => {
-      return { page, label: getPlaygroundProjectLabel(page) };
-    }),
+    // subpagePath: 'projects',
+    // subpages: Object.values(PlaygroundProjectEnum).map((page) => {
+    //   return { page, label: getPlaygroundProjectLabel(page) };
+    // }),
   },
   { page: 'projects' },
 ];
