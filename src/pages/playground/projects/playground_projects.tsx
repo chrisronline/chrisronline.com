@@ -10,6 +10,7 @@ import { TicTacToeReact, renderTicTacToe } from './tic_tac_toe';
 import { PhoneInputReact } from './phone_input';
 import './playground_projects.scss';
 import { RenderVanilla } from '../../../components';
+import { TreeOutlineReact } from './tree_outline';
 
 const RENDERER_PARAM = 'renderer';
 export const PlaygroundProjects = () => {
@@ -53,6 +54,11 @@ export const PlaygroundProjects = () => {
             return <PhoneInputReact />;
           // case RendererTypes.Vanilla:
           //   return <RenderVanilla render={renderTicTacToe} />
+        }
+      case PlaygroundProjectEnum.TREE_OUTLINE:
+        switch (searchParams.get(RENDERER_PARAM)) {
+          case RendererTypes.React:
+            return <TreeOutlineReact />;
         }
     }
   }

@@ -1,3 +1,10 @@
 .playground-project-heading {
   margin: 0;
 }
+
+.playground-project-list {
+  margin-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  list-style-type: circle;
+}

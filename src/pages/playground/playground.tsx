@@ -10,7 +10,7 @@ export const Playground = () => {
       <header>
         <h2>Playground</h2>
       </header>
-      <ul>
+      <ul className="playground-project-list">
         {Object.keys(PlaygroundProjectEnum).map((project) => (
           <li key={project}>
             <article className="playground-project">

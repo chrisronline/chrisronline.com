@@ -8,6 +8,8 @@ export function getPlaygroundProjectLabel(project: PlaygroundProjectEnum) {
       return 'Tic Tac Toe';
     case PlaygroundProjectEnum.PHONE_INPUT:
       return 'Phone Input';
+    case PlaygroundProjectEnum.TREE_OUTLINE:
+      return 'Tree Outline';
   }
   return project;
 }
