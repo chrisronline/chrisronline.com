@@ -1,5 +1,5 @@
 import React from 'react';
-import ChrisProfilePicture from '../../media/images/chris.jpg';
+import ChrisProfilePicture from '../../media/images/chris.webp';
 import './home.scss';
 
 export const Home = () => {

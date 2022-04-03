@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { capitalize } from '../../../lib/capitalize';
@@ -34,6 +34,7 @@ export const PlaygroundProjects = () => {
           case RendererTypes.Vanilla:
             return <RenderVanilla render={renderInfiniteScroll} />
         }
+        break;
       case PlaygroundProjectEnum.SLIDER:
         switch (searchParams.get(RENDERER_PARAM)) {
           case RendererTypes.React:
@@ -41,6 +42,7 @@ export const PlaygroundProjects = () => {
           case RendererTypes.Vanilla:
             return <RenderVanilla render={renderSlider} />
         }
+        break;
       case PlaygroundProjectEnum.TIC_TAC_TOE:
         switch (searchParams.get(RENDERER_PARAM)) {
           case RendererTypes.React:
@@ -48,6 +50,7 @@ export const PlaygroundProjects = () => {
           case RendererTypes.Vanilla:
             return <RenderVanilla render={renderTicTacToe} />
         }
+        break;
       case PlaygroundProjectEnum.PHONE_INPUT:
         switch (searchParams.get(RENDERER_PARAM)) {
           case RendererTypes.React:
@@ -55,11 +58,13 @@ export const PlaygroundProjects = () => {
           // case RendererTypes.Vanilla:
           //   return <RenderVanilla render={renderTicTacToe} />
         }
+        break;
       case PlaygroundProjectEnum.TREE_OUTLINE:
         switch (searchParams.get(RENDERER_PARAM)) {
           case RendererTypes.React:
             return <TreeOutlineReact />;
         }
+        break;
     }
   }
 
@@ -86,3 +91,5 @@ export const PlaygroundProjects = () => {
     </section>
   );
 };
+
+export { PlaygroundProjects as default };

@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "webpack",
+    "build": "webpack --config webpack.config.prod.js",
     "watch": "webpack --watch",
-    "lint": "yarn run eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "repository": {
     "type": "git",

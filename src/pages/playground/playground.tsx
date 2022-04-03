@@ -35,3 +35,5 @@ export const Playground = () => {
     </section>
   );
 };
+
+export { Playground as default };

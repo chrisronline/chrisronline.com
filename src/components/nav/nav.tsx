@@ -6,17 +6,11 @@ import { brands } from '@fortawesome/fontawesome-svg-core/import.macro';
 import './nav.scss';
 import { SubNav } from './subnav';
 import { NavPage } from '../../types';
-import { PlaygroundProjectEnum } from '../../pages/playground/types';
-import { getPlaygroundProjectLabel } from '../../lib/playground_project_label';
 
 const PAGES: NavPage[] = [
   { page: 'home' },
   {
     page: 'playground',
-    // subpagePath: 'projects',
-    // subpages: Object.values(PlaygroundProjectEnum).map((page) => {
-    //   return { page, label: getPlaygroundProjectLabel(page) };
-    // }),
   },
   { page: 'projects' },
 ];

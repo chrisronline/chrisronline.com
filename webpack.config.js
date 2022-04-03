@@ -6,7 +6,6 @@ const devMode = process.env.NODE_ENV !== 'production';
 module.exports = {
   mode: 'development',
   entry: './src/index.tsx',
-  devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -20,7 +19,7 @@ module.exports = {
         enforce: 'pre',
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
         type: 'asset/resource',
       },
       {

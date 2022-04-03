@@ -1,19 +1,32 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Home } from './pages/home';
 import { Nav } from './components';
-import { Playground, PlaygroundProjects } from './pages/playground';
-import { Projects } from './pages/projects';
 import './app.scss';
 import { ConfigContext } from './context';
 import { ConfigContextType, PrivateConfig } from './types';
 import { getConfig } from './config';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
+const Playground = lazy(() => import('./pages/playground'));
+const PlaygroundProjects = lazy(() => import('./pages/playground/projects'));
+const Home = lazy(() => import('./pages/home'));
+const Projects = lazy(() => import('./pages/projects'));
+
+function LazyRoute(component: React.ReactElement) {
+  return (
+    <Suspense
+      fallback={<FontAwesomeIcon icon={solid('spinner')} spin={true} />}
+    >
+      {component}
+    </Suspense>
+  );
+}
 
 export function App() {
   const configContext: ConfigContextType = {
-    catsApiKey: getConfig(PrivateConfig.CatsApiKey)
-  }
+    catsApiKey: getConfig(PrivateConfig.CatsApiKey),
+  };
   return (
     <ConfigContext.Provider value={configContext}>
       <BrowserRouter>
@@ -24,10 +37,13 @@ export function App() {
           </header>
           <div id="content">
             <Routes>
-              <Route path="/" element={<Home />}/>
-              <Route path="/playground" element={<Playground />}/>
-              <Route path="/playground/projects/:projectId" element={<PlaygroundProjects />}/>
-              <Route path="/projects" element={<Projects />}/>
+              <Route path="/" element={LazyRoute(<Home />)} />
+              <Route path="/playground" element={LazyRoute(<Playground />)} />
+              <Route
+                path="/playground/projects/:projectId"
+                element={LazyRoute(<PlaygroundProjects />)}
+              />
+              <Route path="/projects" element={LazyRoute(<Projects />)} />
             </Routes>
           </div>
         </div>

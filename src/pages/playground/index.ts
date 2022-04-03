@@ -1,2 +1,2 @@
-export { Playground } from './playground';
-export { PlaygroundProjects } from './projects';
+import { Playground } from './playground';
+export { Playground, Playground as default };

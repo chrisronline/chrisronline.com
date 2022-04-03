@@ -1,6 +1,6 @@
 export function throttle(callback: () => void, ms: number) {
   let waiting = false;
-  return (...args: any) => {
+  return (...args: never) => {
     if (waiting) return;
     waiting = true;
     setTimeout(() => {

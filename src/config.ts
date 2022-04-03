@@ -8,8 +8,9 @@ let _config: Config;
 try {
   // tslint:disable-next-line: no-var-requires
   _config = require('./_config.json');
-// tslint:disable-next-line: no-empty
-} catch (err) {}
+} catch (err) {
+  // Do nothing here
+}
 
 export const getConfig = (key: PrivateConfig): string => {
   if (!_config) return null;

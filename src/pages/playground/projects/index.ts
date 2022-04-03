@@ -1,2 +1,3 @@
 export * from './infinite_scroll';
-export { PlaygroundProjects } from './playground_projects';
+import { PlaygroundProjects } from './playground_projects';
+export { PlaygroundProjects, PlaygroundProjects as default };
