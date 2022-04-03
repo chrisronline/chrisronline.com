@@ -11,6 +11,7 @@ import { PhoneInputReact } from './phone_input';
 import './playground_projects.scss';
 import { RenderVanilla } from '../../../components';
 import { TreeOutlineReact } from './tree_outline';
+import { HeatmapReact } from './heatmap';
 
 const RENDERER_PARAM = 'renderer';
 export const PlaygroundProjects = () => {
@@ -63,6 +64,12 @@ export const PlaygroundProjects = () => {
         switch (searchParams.get(RENDERER_PARAM)) {
           case RendererTypes.React:
             return <TreeOutlineReact />;
+        }
+        break;
+      case PlaygroundProjectEnum.HEATMAP:
+        switch (searchParams.get(RENDERER_PARAM)) {
+          case RendererTypes.React:
+            return <HeatmapReact />;
         }
         break;
     }

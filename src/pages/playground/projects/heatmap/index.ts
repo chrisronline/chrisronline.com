@@ -1,0 +1,1 @@
+export { HeatmapReact } from './heatmap.react';

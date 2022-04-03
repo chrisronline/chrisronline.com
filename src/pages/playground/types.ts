@@ -3,7 +3,8 @@ export enum PlaygroundProjectEnum {
   SLIDER = 'slider',
   TIC_TAC_TOE = 'tic_tac_toe',
   PHONE_INPUT = 'phone_input',
-  TREE_OUTLINE = 'tree_outline'
+  TREE_OUTLINE = 'tree_outline',
+  HEATMAP = 'heatmap'
 }
 export enum RendererTypes {
   React = 'react',
