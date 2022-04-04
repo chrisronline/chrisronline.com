@@ -26,6 +26,7 @@ function LazyRoute(component: React.ReactElement) {
 export function App() {
   const configContext: ConfigContextType = {
     catsApiKey: getConfig(PrivateConfig.CatsApiKey),
+    googleApiKey: getConfig(PrivateConfig.GoogleApiKey),
   };
   return (
     <ConfigContext.Provider value={configContext}>

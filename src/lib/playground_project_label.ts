@@ -10,6 +10,8 @@ export function getPlaygroundProjectLabel(project: PlaygroundProjectEnum) {
       return 'Phone Input';
     case PlaygroundProjectEnum.TREE_OUTLINE:
       return 'Tree Outline';
+    case PlaygroundProjectEnum.YOUTUBE_GALLERY:
+      return 'Youtube Gallery';
   }
   return project;
 }

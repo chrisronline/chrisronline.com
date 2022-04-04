@@ -4,7 +4,8 @@ export enum PlaygroundProjectEnum {
   TIC_TAC_TOE = 'tic_tac_toe',
   PHONE_INPUT = 'phone_input',
   TREE_OUTLINE = 'tree_outline',
-  HEATMAP = 'heatmap'
+  HEATMAP = 'heatmap',
+  YOUTUBE_GALLERY = 'youtube_gallery'
 }
 export enum RendererTypes {
   React = 'react',

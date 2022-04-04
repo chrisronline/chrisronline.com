@@ -12,6 +12,7 @@ import './playground_projects.scss';
 import { RenderVanilla } from '../../../components';
 import { TreeOutlineReact } from './tree_outline';
 import { HeatmapReact } from './heatmap';
+import { YouTubeGalleryReact } from './youtube_gallery';
 
 const RENDERER_PARAM = 'renderer';
 export const PlaygroundProjects = () => {
@@ -27,6 +28,7 @@ export const PlaygroundProjects = () => {
   }, [searchParams]);
 
   function renderProject() {
+    // TODO: make this more dynamic based on import path and the enum
     switch (projectId) {
       case PlaygroundProjectEnum.INFINITE_SCROLL:
         switch (searchParams.get(RENDERER_PARAM)) {
@@ -70,6 +72,12 @@ export const PlaygroundProjects = () => {
         switch (searchParams.get(RENDERER_PARAM)) {
           case RendererTypes.React:
             return <HeatmapReact />;
+        }
+        break;
+      case PlaygroundProjectEnum.YOUTUBE_GALLERY:
+        switch (searchParams.get(RENDERER_PARAM)) {
+          case RendererTypes.React:
+            return <YouTubeGalleryReact />;
         }
         break;
     }

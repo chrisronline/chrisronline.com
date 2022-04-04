@@ -1,5 +1,6 @@
 export enum PrivateConfig {
   CatsApiKey = 'catsApiKey',
+  GoogleApiKey = 'googleApiKey',
 }
 
 export type ConfigContextType = {
