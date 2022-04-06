@@ -1,7 +1,7 @@
 export enum ThumnbnailType {
-  default,
-  medium,
-  high,
+  default = 'default',
+  medium = 'medium',
+  high = 'high',
 }
 
 export interface YoutubeVideos {
