@@ -5,7 +5,6 @@ import './youtube_gallery.scss';
 
 export const YouTubeGalleryReact = () => {
   const { googleApiKey } = useContext(ConfigContext);
-  // curl "https://api.twitter.com/2/users/14355027/tweets?expansions=attachments.media_keys&media.fields=media_key,height,preview_image_url,type,url,width" -H "Authorization: Bearer $BEARER_TOKEN"
   const [videos, setVideos] = useState<YoutubeVideos[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string>();
 
