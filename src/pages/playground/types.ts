@@ -5,7 +5,8 @@ export enum PlaygroundProjectEnum {
   PHONE_INPUT = 'phone_input',
   TREE_OUTLINE = 'tree_outline',
   HEATMAP = 'heatmap',
-  YOUTUBE_GALLERY = 'youtube_gallery'
+  YOUTUBE_GALLERY = 'youtube_gallery',
+  TOOLTIP = 'tooltip'
 }
 export enum RendererTypes {
   React = 'react',
