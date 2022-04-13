@@ -13,7 +13,7 @@ import { RenderVanilla } from '../../../components';
 import { TreeOutlineReact } from './tree_outline';
 import { HeatmapReact } from './heatmap';
 import { YouTubeGalleryReact } from './youtube_gallery';
-import { TooltipReact } from './tooltip';
+import { renderTooltip, TooltipReact } from './tooltip';
 
 const RENDERER_PARAM = 'renderer';
 export const PlaygroundProjects = () => {
@@ -85,6 +85,8 @@ export const PlaygroundProjects = () => {
         switch (searchParams.get(RENDERER_PARAM)) {
           case RendererTypes.React:
             return <TooltipReact />;
+          case RendererTypes.Vanilla:
+            return <RenderVanilla render={renderTooltip} />
         }
         break;
     }

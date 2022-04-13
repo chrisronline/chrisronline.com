@@ -2,37 +2,54 @@ export interface VanillaComponentProps {
   type: string;
   parent: HTMLElement;
   classes: string[];
-  child?: VanillaComponent;
+  renderAsString?: boolean;
 }
 export class VanillaComponent {
   type = '';
   parent: HTMLElement = null;
   element: HTMLElement = null;
   classes: string[] = [];
-  child?: VanillaComponent;
+  renderAsString = true;
 
   constructor({
     type,
     parent,
     classes,
-    child,
+    renderAsString = true,
   }: VanillaComponentProps) {
     this.parent = parent;
     this.type = type;
     this.classes = classes;
-    this.child = child;
+    this.renderAsString = renderAsString;
+  }
+
+  setParent(newParent: HTMLElement) {
+    this.parent = newParent;
   }
 
   render() {
     if (this.element) this.destroy();
-    this.element = document.createElement(this.type);
-    this.element.classList.add(...this.classes);
-    this.element.innerHTML = this.html();
+    if (this.renderAsString) {
+      this.element = document.createElement(this.type);
+      this.element.classList.add(...this.classes);
+      this.element.innerHTML = this.toHtml();
+    } else {
+      this.element = this.toElement();
+    }
     this.parent.appendChild(this.element);
+    this.postRender();
   }
 
-  html() {
+  toHtml() {
     return ``;
+  }
+
+  toElement(): HTMLElement | null {
+    return null;
+  }
+
+  postRender() {
+    // nothing
   }
 
   destroy() {
