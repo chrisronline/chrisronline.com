@@ -9,9 +9,9 @@ import { NavPage } from '../../types';
 
 const PAGES: NavPage[] = [
   { page: 'home' },
-  {
-    page: 'playground',
-  },
+  // {
+  //   page: 'playground',
+  // },
   { page: 'projects' },
 ];
 
