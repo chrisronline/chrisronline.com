@@ -69,12 +69,20 @@ function memo(callback: () => void, key?: string, durationInMs?: number) {
 
 const TOOLTIP_HELPERS = {
   positionCenter: (elem1DomRect: DOMRect, elem2DomRect: DOMRect) => {
-    return (elem1DomRect.x - elem2DomRect.x) + ((elem1DomRect.width / 2) - (elem2DomRect.width / 2));
+    return (
+      elem1DomRect.x -
+      elem2DomRect.x +
+      (elem1DomRect.width / 2 - elem2DomRect.width / 2)
+    );
   },
-  positionRight: (elem1DomRect: DOMRect, elem2DomRect: DOMRect, spacing?: number) => {
-    return (elem1DomRect.x - elem2DomRect.x) + elem1DomRect.width;
-  }
-}
+  positionRight: (
+    elem1DomRect: DOMRect,
+    elem2DomRect: DOMRect,
+    spacing?: number
+  ) => {
+    return elem1DomRect.x - elem2DomRect.x + elem1DomRect.width;
+  },
+};
 
 export function renderIntoApp(parent: HTMLElement) {
   let globalId = 0;
@@ -157,14 +165,12 @@ export function renderIntoApp(parent: HTMLElement) {
       this.parent.appendChild(this.tooltip);
     }
 
-
     postRender() {
       super.postRender();
 
       if (this.events.includes(Events.click)) {
         window.addEventListener('click', this.hideTooltip);
       }
-
 
       // console.log(this.elementBounds.width);
       // setTimeout(() => {
@@ -174,23 +180,37 @@ export function renderIntoApp(parent: HTMLElement) {
       //   console.log('raf', this.element.getBoundingClientRect().width);
       // });
       setTimeout(() => {
-        this.tooltipBounds = this.tooltip.getBoundingClientRect();
-        this.elementBounds = this.element.getBoundingClientRect();
-        if (window.scrollY) {
-          this.tooltipBounds.y += window.scrollY;
-          this.elementBounds.y += window.scrollY;
-        }
-
+        this.calculateBounds();
         this.defaultPosition();
 
-        this.observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.intersectionRatio < 0.9) {
-              this.swapPosition();
-            }
-          })
-        }, { threshold: 0.9 })
+        this.observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.intersectionRatio < 0.9) {
+                this.swapPosition();
+              }
+            });
+          },
+          { threshold: 0.9 }
+        );
         this.observer.observe(this.tooltip);
+      }, 300);
+    }
+
+    calculateBounds() {
+      this.tooltipBounds = this.tooltip.getBoundingClientRect();
+      this.elementBounds = this.element.getBoundingClientRect();
+      if (window.scrollY) {
+        this.tooltipBounds.y += window.scrollY;
+        this.elementBounds.y += window.scrollY;
+      }
+    }
+
+    onResize() {
+      super.onResize();
+      setTimeout(() => {
+        this.calculateBounds();
+        this.defaultPosition();
       }, 300);
     }
 
@@ -203,13 +223,20 @@ export function renderIntoApp(parent: HTMLElement) {
       let y = 0;
       switch (this.position) {
         case Position.top:
-          x = TOOLTIP_HELPERS.positionCenter(this.elementBounds, this.tooltipBounds);
+          x = TOOLTIP_HELPERS.positionCenter(
+            this.elementBounds,
+            this.tooltipBounds
+          );
           y =
             -(this.elementBounds.height + this.tooltipBounds.height) -
             this.spacingInPixels;
           break;
         case Position.right:
-          x = TOOLTIP_HELPERS.positionRight(this.elementBounds, this.tooltipBounds, this.spacingInPixels);
+          x = TOOLTIP_HELPERS.positionRight(
+            this.elementBounds,
+            this.tooltipBounds,
+            this.spacingInPixels
+          );
           y = -this.tooltipBounds.height;
           break;
       }
@@ -226,21 +253,26 @@ export function renderIntoApp(parent: HTMLElement) {
       this.shadowTooltip.classList.add('shadow');
       this.shadowTooltip.style.visibility = 'hidden';
       this.element.appendChild(this.shadowTooltip);
-      this.shadowObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio === 1) {
-            this.defaultPosition();
-          }
-        })
-      }, { threshold: 1 })
+      this.shadowObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.intersectionRatio === 1) {
+              this.defaultPosition();
+            }
+          });
+        },
+        { threshold: 1 }
+      );
       this.shadowObserver.observe(this.shadowTooltip);
-
 
       let x = 0;
       let y = 0;
       switch (this.position) {
         case Position.top:
-          x = TOOLTIP_HELPERS.positionCenter(this.elementBounds, this.tooltipBounds);
+          x = TOOLTIP_HELPERS.positionCenter(
+            this.elementBounds,
+            this.tooltipBounds
+          );
           y = this.spacingInPixels;
           break;
       }
@@ -320,7 +352,10 @@ export function renderIntoApp(parent: HTMLElement) {
   wrapper.innerHTML = htmlPage;
   parent.appendChild(wrapper);
 
+  const mql = window.matchMedia('(min-width: 1096px)');
+
   new TooltipWrapper({
+    mql,
     position: Position.top,
     events: [Events.click],
     content: 'Hey Chris!',
@@ -331,6 +366,7 @@ export function renderIntoApp(parent: HTMLElement) {
   }).render();
 
   new TooltipWrapper({
+    mql,
     position: Position.right,
     events: [Events.click],
     content: 'This goes to the right',

@@ -2,12 +2,14 @@ export interface VanillaComponentProps {
   type: string;
   parent: HTMLElement;
   classes: string[];
+  mql: MediaQueryList;
   renderAsString?: boolean;
 }
 export class VanillaComponent {
   type = '';
   parent: HTMLElement = null;
   element: HTMLElement = null;
+  mql: MediaQueryList;
   classes: string[] = [];
   renderAsString = true;
 
@@ -15,16 +17,23 @@ export class VanillaComponent {
     type,
     parent,
     classes,
+    mql,
     renderAsString = true,
   }: VanillaComponentProps) {
     this.parent = parent;
     this.type = type;
+    this.mql = mql;
     this.classes = classes;
     this.renderAsString = renderAsString;
+    this.onResize = this.onResize.bind(this);
   }
 
   setParent(newParent: HTMLElement) {
     this.parent = newParent;
+  }
+
+  onResize() {
+    // noting
   }
 
   render() {
@@ -37,6 +46,7 @@ export class VanillaComponent {
       this.element = this.toElement();
     }
     this.parent.appendChild(this.element);
+    this.mql.addEventListener('change', this.onResize);
     this.postRender();
   }
 
@@ -54,5 +64,6 @@ export class VanillaComponent {
 
   destroy() {
     this.element.remove();
+    this.mql.removeEventListener('change', this.onResize);
   }
 }
