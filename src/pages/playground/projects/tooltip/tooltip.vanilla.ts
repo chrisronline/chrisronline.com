@@ -1,10 +1,10 @@
 import { VanillaComponent, VanillaComponentProps } from '../lib';
 
 enum Position {
-  top,
-  bottom,
-  left,
-  right,
+  top = 'top',
+  bottom = 'bottom',
+  left = 'left',
+  right = 'right',
 }
 
 enum Events {
@@ -19,70 +19,70 @@ interface TooltipWrapperProps {
   spacingInPixels?: number;
 }
 
-// function throttle(callback: () => void, delay: number) {
-//   let called = false;
-//   let lastArgs: unknown[] = null;
-//   return (...args: unknown[]) => {
-//     if (called) {
-//       lastArgs = args;
-//       return;
-//     }
-//     called = true;
-//     callback.apply(this, ...args);
-//     setTimeout(() => {
-//       callback.apply(this, lastArgs);
-//       lastArgs = null;
-//       called = false;
-//     }, delay);
-//   };
-// }
-
-// function debounce(callback: () => void, delay: number) {
-//   let timer: NodeJS.Timeout;
-//   return (...args: unknown[]) => {
-//     if (timer) clearTimeout(timer);
-//     timer = setTimeout(() => {
-//       callback.apply(this, ...args);
-//       timer = null;
-//     }, delay);
-//   }
-// }
-
-function memo(callback: () => void, key?: string, durationInMs?: number) {
-  const cache = new Map<string, () => void>();
-  const cacheKey = key ?? callback.toString();
-  return (...args: unknown[]) => {
-    if (cache.has(cacheKey)) {
-      return cache.get(cacheKey);
-    }
-    const func = callback.apply(this, args);
-    cache.set(cacheKey, func);
-    setTimeout(
-      () => {
-        cache.delete(cacheKey);
-      },
-      durationInMs ? durationInMs : 300
-    );
-    return func;
-  };
-}
-
 const TOOLTIP_HELPERS = {
-  positionCenter: (elem1DomRect: DOMRect, elem2DomRect: DOMRect) => {
+  positionCenter: (elementDomRect: DOMRect, tooltipDomRect: DOMRect) => {
     return (
-      elem1DomRect.x -
-      elem2DomRect.x +
-      (elem1DomRect.width / 2 - elem2DomRect.width / 2)
+      elementDomRect.x -
+      tooltipDomRect.x +
+      (elementDomRect.width / 2 - tooltipDomRect.width / 2)
     );
   },
   positionRight: (
-    elem1DomRect: DOMRect,
-    elem2DomRect: DOMRect,
+    elementDomRect: DOMRect,
+    tooltipDomRect: DOMRect,
     spacing?: number
   ) => {
-    return elem1DomRect.x - elem2DomRect.x + elem1DomRect.width;
+    return elementDomRect.x - tooltipDomRect.x + elementDomRect.width + spacing;
+  },
+  positionLeft: (
+    elementDomRect: DOMRect,
+    tooltipDomRect: DOMRect,
+    spacing?: number
+  ) => {
+    return elementDomRect.x - tooltipDomRect.x - tooltipDomRect.width - spacing;
   },
 };
+
+function getNextPositions(position: Position) {
+  switch (position) {
+    case Position.top:
+      return [Position.bottom, Position.right, Position.left];
+    case Position.right:
+      return [Position.left, Position.top, Position.bottom];
+  }
+}
+
+function getCoordinatesFromPosition(
+  position: Position,
+  elementDomRect: DOMRect,
+  tooltipDomRect: DOMRect,
+  spacing: number
+) {
+  let x, y;
+  switch (position) {
+    case Position.top:
+      x = TOOLTIP_HELPERS.positionCenter(elementDomRect, tooltipDomRect);
+      y = -(elementDomRect.height + tooltipDomRect.height) - spacing;
+      break;
+    case Position.right:
+      x = TOOLTIP_HELPERS.positionRight(
+        elementDomRect,
+        tooltipDomRect,
+        spacing
+      );
+      y = -(elementDomRect.height - spacing);
+      break;
+    case Position.left:
+      x = TOOLTIP_HELPERS.positionLeft(elementDomRect, tooltipDomRect, spacing);
+      y = -(elementDomRect.height - spacing);
+      break;
+    case Position.bottom:
+      x = TOOLTIP_HELPERS.positionCenter(elementDomRect, tooltipDomRect);
+      y = spacing;
+      break;
+  }
+  return { x, y };
+}
 
 export function renderIntoApp(parent: HTMLElement) {
   let globalId = 0;
@@ -90,6 +90,8 @@ export function renderIntoApp(parent: HTMLElement) {
   class TooltipWrapper extends VanillaComponent {
     id = '';
     position: TooltipWrapperProps['position'];
+    nextPositions: TooltipWrapperProps['position'][];
+    nextPositionIndex: number;
     content: TooltipWrapperProps['content'];
     events: TooltipWrapperProps['events'];
     tooltip: HTMLElement;
@@ -112,14 +114,16 @@ export function renderIntoApp(parent: HTMLElement) {
 
       this.id = `${++globalId}_tooltip_wrapper_${+new Date()}`;
       this.position = position;
+      this.nextPositions = getNextPositions(position);
+      this.nextPositionIndex = -1;
       this.content = content;
       this.events = events;
       this.spacingInPixels = spacingInPixels;
       this.children = Array.from(parentProps.parent.childNodes);
       this.showTooltip = this.showTooltip.bind(this);
       this.hideTooltip = this.hideTooltip.bind(this);
-      this.defaultPosition = memo(this.defaultPosition.bind(this));
-      this.swapPosition = memo(this.swapPosition.bind(this));
+      this.defaultPosition = this.defaultPosition.bind(this);
+      this.swapPosition = this.swapPosition.bind(this);
     }
 
     toElement() {
@@ -206,41 +210,17 @@ export function renderIntoApp(parent: HTMLElement) {
       }
     }
 
-    onResize() {
-      super.onResize();
-      setTimeout(() => {
-        this.calculateBounds();
-        this.defaultPosition();
-      }, 300);
-    }
-
     defaultPosition() {
       // Cleanup any shadow logic
       this.shadowObserver?.disconnect();
-      this.shadowTooltip?.remove();
+      this.nextPositionIndex = -1;
 
-      let x = 0;
-      let y = 0;
-      switch (this.position) {
-        case Position.top:
-          x = TOOLTIP_HELPERS.positionCenter(
-            this.elementBounds,
-            this.tooltipBounds
-          );
-          y =
-            -(this.elementBounds.height + this.tooltipBounds.height) -
-            this.spacingInPixels;
-          break;
-        case Position.right:
-          x = TOOLTIP_HELPERS.positionRight(
-            this.elementBounds,
-            this.tooltipBounds,
-            this.spacingInPixels
-          );
-          y = -this.tooltipBounds.height;
-          break;
-      }
-
+      const { x, y } = getCoordinatesFromPosition(
+        this.position,
+        this.elementBounds,
+        this.tooltipBounds,
+        this.spacingInPixels
+      );
       this.tooltip.style.position = 'absolute';
       this.tooltip.style.top = 'auto';
       this.tooltip.style.transform = `translate3d(${x}px,${y}px,0px)`;
@@ -248,11 +228,18 @@ export function renderIntoApp(parent: HTMLElement) {
 
     swapPosition() {
       // Add shadow tooltip so we know when to swap back
-      if (this.shadowTooltip) this.shadowTooltip.remove();
+      this.shadowTooltip?.remove();
       this.shadowTooltip = this.tooltip.cloneNode(true) as HTMLElement;
+      const { x: shadowX, y: shadowY } = getCoordinatesFromPosition(
+        this.position,
+        this.elementBounds,
+        this.tooltipBounds,
+        this.spacingInPixels
+      );
+      this.shadowTooltip.style.transform = `translate3d(${shadowX}px,${shadowY}px,0px)`;
       this.shadowTooltip.classList.add('shadow');
       this.shadowTooltip.style.visibility = 'hidden';
-      this.element.appendChild(this.shadowTooltip);
+      this.parent.appendChild(this.shadowTooltip);
       this.shadowObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -265,18 +252,29 @@ export function renderIntoApp(parent: HTMLElement) {
       );
       this.shadowObserver.observe(this.shadowTooltip);
 
-      let x = 0;
-      let y = 0;
-      switch (this.position) {
-        case Position.top:
-          x = TOOLTIP_HELPERS.positionCenter(
-            this.elementBounds,
-            this.tooltipBounds
-          );
-          y = this.spacingInPixels;
-          break;
+      this.observer.disconnect();
+      if (this.nextPositionIndex + 1 === 4) {
+        const { x, y } = getCoordinatesFromPosition(
+          this.nextPositions[0],
+          this.elementBounds,
+          this.tooltipBounds,
+          this.spacingInPixels
+        );
+        this.tooltip.style.transform = `translate3d(${x}px,${y}px,0px)`;
+      } else {
+        ++this.nextPositionIndex;
+        const index =
+          this.nextPositionIndex + 1 === 4 ? 0 : this.nextPositionIndex;
+        const nextPosition = this.nextPositions[index];
+        const { x, y } = getCoordinatesFromPosition(
+          nextPosition,
+          this.elementBounds,
+          this.tooltipBounds,
+          this.spacingInPixels
+        );
+        this.tooltip.style.transform = `translate3d(${x}px,${y}px,0px)`;
+        this.observer.observe(this.tooltip);
       }
-      this.tooltip.style.transform = `translate3d(${x}px,${y}px,0px)`;
     }
 
     showTooltip() {
@@ -316,7 +314,7 @@ export function renderIntoApp(parent: HTMLElement) {
   }
 
   const htmlPage = `
-    <div className="content">
+    <div class="tooltip-content">
     <h1>HTML Ipsum Presents</h1>
 
     <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris <span id="tooltip_top">placerat eleifend</span> leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
@@ -352,10 +350,7 @@ export function renderIntoApp(parent: HTMLElement) {
   wrapper.innerHTML = htmlPage;
   parent.appendChild(wrapper);
 
-  const mql = window.matchMedia('(min-width: 1096px)');
-
   new TooltipWrapper({
-    mql,
     position: Position.top,
     events: [Events.click],
     content: 'Hey Chris!',
@@ -366,7 +361,6 @@ export function renderIntoApp(parent: HTMLElement) {
   }).render();
 
   new TooltipWrapper({
-    mql,
     position: Position.right,
     events: [Events.click],
     content: 'This goes to the right',

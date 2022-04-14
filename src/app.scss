@@ -2,8 +2,16 @@
 @import './scss/mixins.scss';
 @import './scss/global.scss';
 
+.container {
+  display: flex;
+  @include breakpoint(small) {
+    flex-direction: column;
+  }
+}
+
 .app-header,
 #content {
+  width: 640px;
   @include breakpoint(default) {
     display: inline-block;
     vertical-align: top;
@@ -13,10 +21,11 @@
 .app-header {
   margin: 8rem 0 0 6rem;
   text-align: right;
+  flex: 1;
   @include clear();
 
   @include breakpoint(small) {
-    margin: 0;
+    margin: 0 auto;
     text-align: left;
     padding: 1rem;
   }
@@ -27,13 +36,12 @@
 }
 
 #content {
-  width: 640px;
   margin: 2rem;
+  flex: 2;
 
   @include breakpoint(small) {
-    width: auto;
     padding: 1rem;
-    margin: -1rem 0 0 0;
+    margin: -1rem auto 0 auto;
   }
 }
 

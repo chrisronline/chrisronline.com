@@ -91,7 +91,7 @@ export const TooltipReact = () => {
       <header>
         <h4>Tooltip examples</h4>
       </header>
-      <div className="content">
+      <div className="tooltip-content">
         <h3>The Problem</h3>
         <p>
           I recently fixed a navigation issue at work that involved a tiered,
