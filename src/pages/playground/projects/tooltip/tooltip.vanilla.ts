@@ -1,4 +1,4 @@
-import { VanillaComponent, VanillaComponentProps } from '../lib';
+import { throttle, VanillaComponent, VanillaComponentProps } from '../lib';
 
 enum Position {
   top = 'top',
@@ -50,6 +50,7 @@ export function renderIntoApp(parent: HTMLElement) {
     observer: IntersectionObserver;
     shadowObserver: IntersectionObserver;
     shadowTooltip: HTMLElement;
+    resizeObserver: ResizeObserver;
 
     constructor({
       position,
@@ -115,6 +116,13 @@ export function renderIntoApp(parent: HTMLElement) {
         this.content.render();
       }
 
+      const onResize = throttle(() => {
+        this.calculateBounds();
+        this.positionTooltip();
+      }, 300);
+      this.resizeObserver = new ResizeObserver(onResize);
+      this.resizeObserver.observe(this.tooltip);
+
       this.element.appendChild(this.tooltip);
     }
 
@@ -143,7 +151,9 @@ export function renderIntoApp(parent: HTMLElement) {
 
         if (position === Position.top) {
           if (this.tooltipBounds.height > this.elementBounds.height) {
-            this.tooltip.style.top = `-${this.tooltipBounds.height + this.spacingInPixels}px`
+            this.tooltip.style.top = `-${
+              this.tooltipBounds.height + this.spacingInPixels
+            }px`;
           } else {
             this.tooltip.style.top = `calc(-100% - ${this.spacingInPixels}px)`;
           }
@@ -190,7 +200,8 @@ export function renderIntoApp(parent: HTMLElement) {
       this.observer.disconnect();
       const nextPosition = this.nextPositions[this.nextPositionIndex++];
       if (!nextPosition) {
-        console.log('no room', this.content);
+        console.log('ran out')
+        this.shadowObserver.disconnect();
         return;
       }
       this.positionTooltip(nextPosition);
@@ -218,8 +229,16 @@ export function renderIntoApp(parent: HTMLElement) {
     hideTooltip(event: Event) {
       if (!this.element || !this.tooltip) return;
       if (event.type !== 'mouseout') {
-        if (event.target === this.element || event.target === this.tooltip)
+        if (event.target === this.element || event.target === this.tooltip) {
           return;
+        }
+        let parentChain = (event.target as HTMLElement).parentNode;
+        while (parentChain) {
+          if (parentChain === this.element || parentChain === this.tooltip) {
+            return;
+          }
+          parentChain = parentChain.parentNode;
+        }
       }
       this.tooltip.style.visibility = 'hidden';
     }
@@ -244,6 +263,7 @@ export function renderIntoApp(parent: HTMLElement) {
 
       super.destroy();
       this.observer?.disconnect();
+      this.resizeObserver?.disconnect();
       this.tooltip.remove();
       this.shadowObserver?.disconnect();
       this.shadowTooltip?.remove();
@@ -327,6 +347,8 @@ export function renderIntoApp(parent: HTMLElement) {
         <h4>This is a tooltip
       </header>
       <p>Yes, it is</p>
+      <p><button id="load_btn">Load image</button></p>
+      <img id="dynamic_image" />
     </section>
   `;
   const htmlTooltip = new TooltipWrapper({
@@ -339,4 +361,10 @@ export function renderIntoApp(parent: HTMLElement) {
     classes: [],
   });
   htmlTooltip.render();
+
+  document.getElementById('load_btn').addEventListener('click', () => {
+    document
+      .getElementById('dynamic_image')
+      .setAttribute('src', 'https://picsum.photos/200');
+  });
 }
