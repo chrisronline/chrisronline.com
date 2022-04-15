@@ -19,49 +19,79 @@ interface TooltipProps {
   content: React.ReactChild;
   position: TooltipPosition;
   children: React.ReactChild;
+  spacingInPixels?: number;
 }
 const Tooltip: React.FunctionComponent<TooltipProps> = ({
   children,
   content,
   position,
+  spacingInPixels = 0,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>();
   const tooltipRef = useRef<HTMLDivElement>();
-  const [tooltipBounds, setSetTooltipBounds] = useState<DOMRect>();
+  const [tooltipBounds, setTooltipBounds] = useState<DOMRect>();
+  const [wrapperBounds, setWrapperBounds] = useState<DOMRect>();
   const [isActive, setIsActive] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [style, setStyle] = useState({});
+  const [style, setStyle] = useState<React.CSSProperties>({
+    visibility: 'hidden',
+  });
 
   const onOver = useCallback(() => {
-    // setIsActive(true);
-  }, [children]);
+    setIsActive(true);
+    setStyle({
+      ...style,
+      visibility: 'visible',
+    });
+  }, [children, style]);
 
   const onOut = useCallback(() => {
-    // setIsActive(false);
-  }, [children]);
+    setIsActive(false);
+    setStyle({
+      ...style,
+      visibility: 'hidden',
+    });
+  }, [children, style]);
 
-  const onResize = useCallback(() => {
-    const bounds = wrapperRef.current.getBoundingClientRect();
-    console.log('resizse', JSON.stringify(bounds));
-  }, [wrapperRef.current])
+  useEffect(() => {
+    if (!tooltipBounds && !wrapperBounds) return;
+    const newStyle: React.CSSProperties = { ...style };
+    if (
+      position === TooltipPosition.top ||
+      position === TooltipPosition.bottom
+    ) {
+      newStyle.left = `${wrapperBounds.width / 2 - tooltipBounds.width / 2}px`;
 
-  useLayoutEffect(() => {
-    if (!wrapperRef.current) return;
-    const bounds = wrapperRef.current.getBoundingClientRect();
-    console.log('layout effect', JSON.stringify(bounds));
-    setTimeout(
-      () =>
-        console.log('timeout', JSON.stringify(wrapperRef.current.getBoundingClientRect())),
-      1000
-    );
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [wrapperRef.current]);
+      if (position === TooltipPosition.top) {
+        if (tooltipBounds.height > wrapperBounds.height) {
+          newStyle.top = `-${tooltipBounds.height + spacingInPixels}px`;
+        } else {
+          newStyle.top = `calc(-100% - ${spacingInPixels}px)`;
+        }
+      } else {
+        newStyle.top = `calc(100% + ${spacingInPixels}px)`;
+      }
+    } else if (
+      position === TooltipPosition.left ||
+      position === TooltipPosition.right
+    ) {
+      newStyle.top = `0px`;
 
-  // useEffect(() => {
-  //   setSetTooltipBounds(tooltipRef.current.getBoundingClientRect());
-  //   setIsLoading(false);
-  // }, []);
+      if (position === TooltipPosition.left) {
+        newStyle.left = `calc(-100% - ${spacingInPixels}px)`;
+      } else if (position === TooltipPosition.right) {
+        newStyle.left = `calc(100% + ${spacingInPixels}px)`;
+      }
+    }
+    setStyle(newStyle);
+  }, [position, tooltipBounds, wrapperBounds]);
+
+  useEffect(() => {
+    if (!tooltipRef.current || !wrapperRef.current) return;
+    setTooltipBounds(tooltipRef.current.getBoundingClientRect());
+    setWrapperBounds(wrapperRef.current.getBoundingClientRect());
+  }, [tooltipRef.current, wrapperRef.current]);
+
 
   return (
     <div
@@ -73,11 +103,7 @@ const Tooltip: React.FunctionComponent<TooltipProps> = ({
     >
       {children}
       {(isActive || isLoading) && (
-        <div
-          className={`tooltip tooltip-position-${position}`}
-          style={style}
-          ref={tooltipRef}
-        >
+        <div className={`tooltip`} style={style} ref={tooltipRef}>
           {content}
         </div>
       )}
