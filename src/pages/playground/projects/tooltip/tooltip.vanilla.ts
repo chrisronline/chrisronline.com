@@ -14,21 +14,22 @@ enum Events {
 
 interface TooltipWrapperProps {
   position: Position;
+  alternatePosition?: Position;
   content: string | HTMLElement | VanillaComponent;
   events: Events[];
   spacingInPixels?: number;
 }
 
-function getNextPositions(position: Position) {
+function getAlternatePosition(position: Position) {
   switch (position) {
     case Position.top:
-      return [Position.bottom, Position.right, Position.left];
+      return Position.bottom;
     case Position.right:
-      return [Position.left, Position.top, Position.bottom];
+      return Position.left;
     case Position.left:
-      return [Position.right, Position.top, Position.bottom];
+      return Position.right;
     case Position.bottom:
-      return [Position.top, Position.left, Position.right];
+      return Position.top;
   }
 }
 
@@ -38,11 +39,11 @@ export function renderIntoApp(parent: HTMLElement) {
   class TooltipWrapper extends VanillaComponent {
     id = '';
     position: TooltipWrapperProps['position'];
+    alternatePosition: TooltipWrapperProps['alternatePosition'];
+    activePosition: TooltipWrapperProps['position'];
     content: TooltipWrapperProps['content'];
     events: TooltipWrapperProps['events'];
     tooltip: HTMLElement;
-    nextPositions: Position[];
-    nextPositionIndex: number;
     spacingInPixels: TooltipWrapperProps['spacingInPixels'];
     children: ChildNode[];
     tooltipBounds: DOMRect;
@@ -56,6 +57,7 @@ export function renderIntoApp(parent: HTMLElement) {
       position,
       content,
       events,
+      alternatePosition = null,
       spacingInPixels = 0,
       ...parentProps
     }: VanillaComponentProps & TooltipWrapperProps) {
@@ -66,8 +68,9 @@ export function renderIntoApp(parent: HTMLElement) {
       this.content = content;
       this.events = events;
       this.spacingInPixels = spacingInPixels;
-      this.nextPositions = getNextPositions(position);
-      this.nextPositionIndex = 0;
+      this.alternatePosition =
+        alternatePosition ?? getAlternatePosition(position);
+      this.activePosition = position;
 
       this.children = Array.from(parentProps.parent.childNodes);
       this.showTooltip = this.showTooltip.bind(this);
@@ -143,7 +146,8 @@ export function renderIntoApp(parent: HTMLElement) {
       }
     }
 
-    positionTooltip(position: Position = this.position) {
+    positionTooltip() {
+      const position = this.activePosition;
       if (position === Position.top || position === Position.bottom) {
         this.tooltip.style.left = `${
           this.elementBounds.width / 2 - this.tooltipBounds.width / 2
@@ -183,7 +187,7 @@ export function renderIntoApp(parent: HTMLElement) {
           entries.forEach((entry) => {
             if (entry.intersectionRatio === 1) {
               this.shadowObserver?.disconnect();
-              this.nextPositionIndex = 0;
+              this.activePosition = this.position;
               this.positionTooltip();
             }
           });
@@ -193,13 +197,8 @@ export function renderIntoApp(parent: HTMLElement) {
       this.shadowObserver.observe(this.shadowTooltip);
 
       this.observer.disconnect();
-      const nextPosition = this.nextPositions[this.nextPositionIndex++];
-      if (!nextPosition) {
-        console.log('ran out')
-        this.shadowObserver.disconnect();
-        return;
-      }
-      this.positionTooltip(nextPosition);
+      this.activePosition = this.alternatePosition;
+      this.positionTooltip();
       this.observer.observe(this.tooltip);
     }
 
@@ -311,7 +310,7 @@ export function renderIntoApp(parent: HTMLElement) {
     parent: document.getElementById('tooltip_top'),
     classes: [],
   });
-  // top.render();
+  top.render();
 
   const right = new TooltipWrapper({
     position: Position.right,
@@ -323,7 +322,6 @@ export function renderIntoApp(parent: HTMLElement) {
     classes: [],
   });
   right.render();
-  return;
 
   const nested = new TooltipWrapper({
     position: Position.top,
