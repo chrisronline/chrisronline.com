@@ -163,16 +163,11 @@ export function renderIntoApp(parent: HTMLElement) {
       } else if (position === Position.left || position === Position.right) {
         this.tooltip.style.top = `0px`;
 
-        let percentage;
-        let operator;
         if (position === Position.left) {
-          percentage = '-100%';
-          operator = '-';
-        } else {
-          percentage = '-100%';
-          operator = '-';
+          this.tooltip.style.left = `calc(-100% - ${this.spacingInPixels}px)`;
+        } else if (position === Position.right) {
+          this.tooltip.style.left = `calc(100% + ${this.spacingInPixels}px)`;
         }
-        this.tooltip.style.top = `calc(${percentage} ${operator} ${this.spacingInPixels}px)`;
       }
     }
 
@@ -316,7 +311,7 @@ export function renderIntoApp(parent: HTMLElement) {
     parent: document.getElementById('tooltip_top'),
     classes: [],
   });
-  top.render();
+  // top.render();
 
   const right = new TooltipWrapper({
     position: Position.right,
@@ -328,6 +323,7 @@ export function renderIntoApp(parent: HTMLElement) {
     classes: [],
   });
   right.render();
+  return;
 
   const nested = new TooltipWrapper({
     position: Position.top,
