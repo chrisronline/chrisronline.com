@@ -13,19 +13,9 @@
 
 .tooltip {
   position: absolute;
-  // top: 0;
-  // left: 50%;
-  // right: 0;
-  // bottom: 0;
-  // transform: translateX(-50%);
-  // border: solid 1px $green;
-  // padding: 5px;
+  white-space: nowrap;
+  width: max-content;
   border-color: $green;
   text-align: center;
   background-color: pink;
-}
-
-.tooltip-position-top {
-  // top: calc(-100% - 12px - 5px);
-  
 }

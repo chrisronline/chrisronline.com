@@ -19,69 +19,17 @@ interface TooltipWrapperProps {
   spacingInPixels?: number;
 }
 
-const TOOLTIP_HELPERS = {
-  positionCenter: (elementDomRect: DOMRect, tooltipDomRect: DOMRect) => {
-    return (
-      elementDomRect.x -
-      tooltipDomRect.x +
-      (elementDomRect.width / 2 - tooltipDomRect.width / 2)
-    );
-  },
-  positionRight: (
-    elementDomRect: DOMRect,
-    tooltipDomRect: DOMRect,
-    spacing?: number
-  ) => {
-    return elementDomRect.x - tooltipDomRect.x + elementDomRect.width + spacing;
-  },
-  positionLeft: (
-    elementDomRect: DOMRect,
-    tooltipDomRect: DOMRect,
-    spacing?: number
-  ) => {
-    return elementDomRect.x - tooltipDomRect.x - tooltipDomRect.width - spacing;
-  },
-};
-
 function getNextPositions(position: Position) {
   switch (position) {
     case Position.top:
       return [Position.bottom, Position.right, Position.left];
     case Position.right:
       return [Position.left, Position.top, Position.bottom];
-  }
-}
-
-function getCoordinatesFromPosition(
-  position: Position,
-  elementDomRect: DOMRect,
-  tooltipDomRect: DOMRect,
-  spacing: number
-) {
-  let x, y;
-  switch (position) {
-    case Position.top:
-      x = TOOLTIP_HELPERS.positionCenter(elementDomRect, tooltipDomRect);
-      y = -(elementDomRect.height + tooltipDomRect.height) - spacing;
-      break;
-    case Position.right:
-      x = TOOLTIP_HELPERS.positionRight(
-        elementDomRect,
-        tooltipDomRect,
-        spacing
-      );
-      y = -(elementDomRect.height - spacing);
-      break;
     case Position.left:
-      x = TOOLTIP_HELPERS.positionLeft(elementDomRect, tooltipDomRect, spacing);
-      y = -(elementDomRect.height - spacing);
-      break;
+      return [Position.right, Position.top, Position.bottom];
     case Position.bottom:
-      x = TOOLTIP_HELPERS.positionCenter(elementDomRect, tooltipDomRect);
-      y = spacing;
-      break;
+      return [Position.top, Position.left, Position.right];
   }
-  return { x, y };
 }
 
 export function renderIntoApp(parent: HTMLElement) {
@@ -90,11 +38,11 @@ export function renderIntoApp(parent: HTMLElement) {
   class TooltipWrapper extends VanillaComponent {
     id = '';
     position: TooltipWrapperProps['position'];
-    nextPositions: TooltipWrapperProps['position'][];
-    nextPositionIndex: number;
     content: TooltipWrapperProps['content'];
     events: TooltipWrapperProps['events'];
     tooltip: HTMLElement;
+    nextPositions: Position[];
+    nextPositionIndex: number;
     spacingInPixels: TooltipWrapperProps['spacingInPixels'];
     children: ChildNode[];
     tooltipBounds: DOMRect;
@@ -114,15 +62,16 @@ export function renderIntoApp(parent: HTMLElement) {
 
       this.id = `${++globalId}_tooltip_wrapper_${+new Date()}`;
       this.position = position;
-      this.nextPositions = getNextPositions(position);
-      this.nextPositionIndex = -1;
       this.content = content;
       this.events = events;
       this.spacingInPixels = spacingInPixels;
+      this.nextPositions = getNextPositions(position);
+      this.nextPositionIndex = 0;
+
       this.children = Array.from(parentProps.parent.childNodes);
       this.showTooltip = this.showTooltip.bind(this);
       this.hideTooltip = this.hideTooltip.bind(this);
-      this.defaultPosition = this.defaultPosition.bind(this);
+      this.positionTooltip = this.positionTooltip.bind(this);
       this.swapPosition = this.swapPosition.bind(this);
     }
 
@@ -166,7 +115,7 @@ export function renderIntoApp(parent: HTMLElement) {
         this.content.render();
       }
 
-      this.parent.appendChild(this.tooltip);
+      this.element.appendChild(this.tooltip);
     }
 
     postRender() {
@@ -175,30 +124,6 @@ export function renderIntoApp(parent: HTMLElement) {
       if (this.events.includes(Events.click)) {
         window.addEventListener('click', this.hideTooltip);
       }
-
-      // console.log(this.elementBounds.width);
-      // setTimeout(() => {
-      //   console.log('time1', this.element.getBoundingClientRect().width);
-      // }, 100);
-      // requestAnimationFrame(() => {
-      //   console.log('raf', this.element.getBoundingClientRect().width);
-      // });
-      setTimeout(() => {
-        this.calculateBounds();
-        this.defaultPosition();
-
-        this.observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.intersectionRatio < 0.9) {
-                this.swapPosition();
-              }
-            });
-          },
-          { threshold: 0.9 }
-        );
-        this.observer.observe(this.tooltip);
-      }, 300);
     }
 
     calculateBounds() {
@@ -210,41 +135,51 @@ export function renderIntoApp(parent: HTMLElement) {
       }
     }
 
-    defaultPosition() {
-      // Cleanup any shadow logic
-      this.shadowObserver?.disconnect();
-      this.nextPositionIndex = -1;
+    positionTooltip(position: Position = this.position) {
+      if (position === Position.top || position === Position.bottom) {
+        this.tooltip.style.left = `${
+          this.elementBounds.width / 2 - this.tooltipBounds.width / 2
+        }px`;
 
-      const { x, y } = getCoordinatesFromPosition(
-        this.position,
-        this.elementBounds,
-        this.tooltipBounds,
-        this.spacingInPixels
-      );
-      this.tooltip.style.position = 'absolute';
-      this.tooltip.style.top = 'auto';
-      this.tooltip.style.transform = `translate3d(${x}px,${y}px,0px)`;
+        if (position === Position.top) {
+          if (this.tooltipBounds.height > this.elementBounds.height) {
+            this.tooltip.style.top = `-${this.tooltipBounds.height + this.spacingInPixels}px`
+          } else {
+            this.tooltip.style.top = `calc(-100% - ${this.spacingInPixels}px)`;
+          }
+        } else {
+          this.tooltip.style.top = `calc(100% + ${this.spacingInPixels}px)`;
+        }
+      } else if (position === Position.left || position === Position.right) {
+        this.tooltip.style.top = `0px`;
+
+        let percentage;
+        let operator;
+        if (position === Position.left) {
+          percentage = '-100%';
+          operator = '-';
+        } else {
+          percentage = '-100%';
+          operator = '-';
+        }
+        this.tooltip.style.top = `calc(${percentage} ${operator} ${this.spacingInPixels}px)`;
+      }
     }
 
     swapPosition() {
       // Add shadow tooltip so we know when to swap back
       this.shadowTooltip?.remove();
       this.shadowTooltip = this.tooltip.cloneNode(true) as HTMLElement;
-      const { x: shadowX, y: shadowY } = getCoordinatesFromPosition(
-        this.position,
-        this.elementBounds,
-        this.tooltipBounds,
-        this.spacingInPixels
-      );
-      this.shadowTooltip.style.transform = `translate3d(${shadowX}px,${shadowY}px,0px)`;
       this.shadowTooltip.classList.add('shadow');
       this.shadowTooltip.style.visibility = 'hidden';
-      this.parent.appendChild(this.shadowTooltip);
+      this.element.appendChild(this.shadowTooltip);
       this.shadowObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.intersectionRatio === 1) {
-              this.defaultPosition();
+              this.shadowObserver?.disconnect();
+              this.nextPositionIndex = 0;
+              this.positionTooltip();
             }
           });
         },
@@ -253,32 +188,30 @@ export function renderIntoApp(parent: HTMLElement) {
       this.shadowObserver.observe(this.shadowTooltip);
 
       this.observer.disconnect();
-      if (this.nextPositionIndex + 1 === 4) {
-        const { x, y } = getCoordinatesFromPosition(
-          this.nextPositions[0],
-          this.elementBounds,
-          this.tooltipBounds,
-          this.spacingInPixels
-        );
-        this.tooltip.style.transform = `translate3d(${x}px,${y}px,0px)`;
-      } else {
-        ++this.nextPositionIndex;
-        const index =
-          this.nextPositionIndex + 1 === 4 ? 0 : this.nextPositionIndex;
-        const nextPosition = this.nextPositions[index];
-        const { x, y } = getCoordinatesFromPosition(
-          nextPosition,
-          this.elementBounds,
-          this.tooltipBounds,
-          this.spacingInPixels
-        );
-        this.tooltip.style.transform = `translate3d(${x}px,${y}px,0px)`;
-        this.observer.observe(this.tooltip);
+      const nextPosition = this.nextPositions[this.nextPositionIndex++];
+      if (!nextPosition) {
+        console.log('no room', this.content);
+        return;
       }
+      this.positionTooltip(nextPosition);
+      this.observer.observe(this.tooltip);
     }
 
     showTooltip() {
       if (!this.element || !this.tooltip) return;
+      this.calculateBounds();
+      this.positionTooltip();
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.intersectionRatio < 0.9) {
+              this.swapPosition();
+            }
+          });
+        },
+        { threshold: 0.9 }
+      );
+      this.observer.observe(this.tooltip);
       this.tooltip.style.visibility = 'visible';
     }
 
@@ -289,6 +222,10 @@ export function renderIntoApp(parent: HTMLElement) {
           return;
       }
       this.tooltip.style.visibility = 'hidden';
+    }
+
+    getTooltip() {
+      return this.tooltip;
     }
 
     destroy() {
@@ -317,7 +254,7 @@ export function renderIntoApp(parent: HTMLElement) {
     <div class="tooltip-content">
     <h1>HTML Ipsum Presents</h1>
 
-    <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris <span id="tooltip_top">placerat eleifend</span> leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
+    <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris <span id="tooltip_top">placerat eleifend</span> leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. <span id="tooltip_html">Aenean fermentum</span>, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
 
     <h2>Header Level 2</h2>
 
@@ -350,7 +287,7 @@ export function renderIntoApp(parent: HTMLElement) {
   wrapper.innerHTML = htmlPage;
   parent.appendChild(wrapper);
 
-  new TooltipWrapper({
+  const top = new TooltipWrapper({
     position: Position.top,
     events: [Events.click],
     content: 'Hey Chris!',
@@ -358,9 +295,10 @@ export function renderIntoApp(parent: HTMLElement) {
     spacingInPixels: 5,
     parent: document.getElementById('tooltip_top'),
     classes: [],
-  }).render();
+  });
+  top.render();
 
-  new TooltipWrapper({
+  const right = new TooltipWrapper({
     position: Position.right,
     events: [Events.click],
     content: 'This goes to the right',
@@ -368,5 +306,37 @@ export function renderIntoApp(parent: HTMLElement) {
     spacingInPixels: 5,
     parent: document.getElementById('tooltip_right'),
     classes: [],
-  }).render();
+  });
+  right.render();
+
+  const nested = new TooltipWrapper({
+    position: Position.top,
+    events: [Events.click],
+    content: 'Nested',
+    type: 'div',
+    spacingInPixels: 5,
+    parent: top.getTooltip(),
+    classes: [],
+  });
+  nested.render();
+
+  const htmlTooltipContent = document.createElement('div');
+  htmlTooltipContent.innerHTML = `
+    <section class="html_tooltip_wrapper">
+      <header>
+        <h4>This is a tooltip
+      </header>
+      <p>Yes, it is</p>
+    </section>
+  `;
+  const htmlTooltip = new TooltipWrapper({
+    position: Position.top,
+    events: [Events.click],
+    content: htmlTooltipContent,
+    type: 'div',
+    spacingInPixels: 5,
+    parent: document.getElementById('tooltip_html'),
+    classes: [],
+  });
+  htmlTooltip.render();
 }
