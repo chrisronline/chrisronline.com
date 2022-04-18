@@ -1,0 +1,45 @@
+@import "../../../../scss/variables";
+
+.form-wrapper {
+  width: 600px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  row-gap: 0.25rem;
+}
+
+.form-label {
+  &:after {
+    content: ':'
+  }
+}
+.form-input {
+  padding: 0.25rem;
+  border: solid 1px $green;
+}
+
+.form-show-errors {
+  .form-input:invalid {
+    border-color: red;
+  }
+
+  .form-input-error {
+    color: red;
+    font-size: smaller;
+  }
+}
+
+.form-btn {
+  padding: 0.5rem;
+  border: solid 2px $green;
+  background-color: #efefef;
+}
+
+.form-btns-row {
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+}

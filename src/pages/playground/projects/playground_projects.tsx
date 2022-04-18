@@ -14,6 +14,7 @@ import { TreeOutlineReact } from './tree_outline';
 import { HeatmapReact } from './heatmap';
 import { YouTubeGalleryReact } from './youtube_gallery';
 import { renderTooltip, TooltipReact } from './tooltip';
+import { FormReact } from './form';
 
 const RENDERER_PARAM = 'renderer';
 export const PlaygroundProjects = () => {
@@ -87,6 +88,14 @@ export const PlaygroundProjects = () => {
             return <TooltipReact />;
           case RendererTypes.Vanilla:
             return <RenderVanilla render={renderTooltip} />
+        }
+        break;
+      case PlaygroundProjectEnum.FORM:
+        switch (searchParams.get(RENDERER_PARAM)) {
+          case RendererTypes.React:
+            return <FormReact />;
+          // case RendererTypes.Vanilla:
+          //   return <RenderVanilla render={renderTooltip} />
         }
         break;
     }

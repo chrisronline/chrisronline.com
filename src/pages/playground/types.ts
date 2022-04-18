@@ -6,7 +6,8 @@ export enum PlaygroundProjectEnum {
   TREE_OUTLINE = 'tree_outline',
   HEATMAP = 'heatmap',
   YOUTUBE_GALLERY = 'youtube_gallery',
-  TOOLTIP = 'tooltip'
+  TOOLTIP = 'tooltip',
+  FORM = 'form'
 }
 export enum RendererTypes {
   React = 'react',
