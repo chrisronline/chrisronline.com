@@ -166,9 +166,13 @@ export function renderIntoApp(parent: HTMLElement) {
         }
       } else if (position === Position.left || position === Position.right) {
         this.tooltip.style.top = `0px`;
-
+        
         if (position === Position.left) {
-          this.tooltip.style.left = `calc(-100% - ${this.spacingInPixels}px)`;
+          let offset = '100%';
+          if (this.tooltipBounds.width > this.elementBounds.width) {
+            offset = `${this.tooltipBounds.width}px`;
+          }
+          this.tooltip.style.left = `calc(-${offset} - ${this.spacingInPixels}px)`;
         } else if (position === Position.right) {
           this.tooltip.style.left = `calc(100% + ${this.spacingInPixels}px)`;
         }
@@ -208,6 +212,7 @@ export function renderIntoApp(parent: HTMLElement) {
       this.positionTooltip();
       this.observer = new IntersectionObserver(
         (entries) => {
+          if (this.activePosition === this.alternatePosition) return;
           entries.forEach((entry) => {
             if (entry.intersectionRatio < 0.9) {
               this.swapPosition();
