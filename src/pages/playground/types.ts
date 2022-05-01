@@ -7,7 +7,8 @@ export enum PlaygroundProjectEnum {
   HEATMAP = 'heatmap',
   YOUTUBE_GALLERY = 'youtube_gallery',
   TOOLTIP = 'tooltip',
-  FORM = 'form'
+  FORM = 'form',
+  STAR_RATING = 'star_rating'
 }
 export enum RendererTypes {
   React = 'react',

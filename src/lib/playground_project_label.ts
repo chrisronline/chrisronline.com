@@ -12,6 +12,8 @@ export function getPlaygroundProjectLabel(project: PlaygroundProjectEnum) {
       return 'Tree Outline';
     case PlaygroundProjectEnum.YOUTUBE_GALLERY:
       return 'Youtube Gallery';
+    case PlaygroundProjectEnum.STAR_RATING:
+      return 'Star Rating';
   }
   return project;
 }

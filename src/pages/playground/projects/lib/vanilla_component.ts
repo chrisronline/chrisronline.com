@@ -8,7 +8,6 @@ export class VanillaComponent {
   type = '';
   parent: HTMLElement = null;
   element: HTMLElement = null;
-  mql: MediaQueryList;
   classes: string[] = [];
   renderAsString = true;
 

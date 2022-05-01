@@ -15,6 +15,7 @@ import { HeatmapReact } from './heatmap';
 import { YouTubeGalleryReact } from './youtube_gallery';
 import { renderTooltip, TooltipReact } from './tooltip';
 import { FormReact } from './form';
+import { renderStarRating } from './star_rating';
 
 const RENDERER_PARAM = 'renderer';
 export const PlaygroundProjects = () => {
@@ -96,6 +97,14 @@ export const PlaygroundProjects = () => {
             return <FormReact />;
           // case RendererTypes.Vanilla:
           //   return <RenderVanilla render={renderTooltip} />
+        }
+        break;
+      case PlaygroundProjectEnum.STAR_RATING:
+        switch (searchParams.get(RENDERER_PARAM)) {
+          // case RendererTypes.React:
+          //   return <FormReact />;
+          case RendererTypes.Vanilla:
+            return <RenderVanilla render={renderStarRating} />
         }
         break;
     }
