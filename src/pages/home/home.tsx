@@ -15,9 +15,7 @@ export const Home = () => {
       />
       <p className="about-copy">Hi. I&apos;m Chris. I write code.</p>
       <p className="about-copy">
-        I am currently working on{' '}
-        <a href="https://www.elastic.co/products/kibana">Kibana</a> at{' '}
-        <a href="https://www.elastic.co">Elastic</a>.
+        I am currently working @ <a href="https://slack.com/">Slack</a>.
       </p>
     </section>
   );
